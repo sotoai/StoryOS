@@ -1,435 +1,578 @@
 import { useState } from "react";
-// ─── CISCO BRAND COLORS ────────────────────────────────────────────────────────
-const CISCO_BLUE = "#049FD9";
-const CISCO_DARK = "#00262B";
-const CISCO_MID  = "#005073";
+
+// ─── PALETTE ───────────────────────────────────────────────────────────────────
+const light = {
+  bg: "#ffffff",
+  surface: "#fafafa",
+  border: "#e5e5e5",
+  borderLight: "#f0f0f0",
+  text: "#171717",
+  textSecondary: "#737373",
+  textTertiary: "#a3a3a3",
+  accent: "#171717",
+  accentSoft: "#f5f5f5",
+  logoInvert: "none",
+};
+const dark = {
+  bg: "#0a0a0a",
+  surface: "#141414",
+  border: "#262626",
+  borderLight: "#1a1a1a",
+  text: "#e5e5e5",
+  textSecondary: "#a3a3a3",
+  textTertiary: "#737373",
+  accent: "#e5e5e5",
+  accentSoft: "#1a1a1a",
+  logoInvert: "invert(1)",
+};
+let C = light;
+
+// ─── ICONS (thin-line SVGs) ────────────────────────────────────────────────────
+
+function CiscoLogo({ width = 80, style = {} }) {
+  return <img src="/cisco-logo.svg" alt="Cisco" style={{ width, height: "auto", ...style }} />;
+}
+
+function IconCompany({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={C.textTertiary} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2C6.5 2 2 6.5 2 12" strokeDasharray="2 3" />
+      <circle cx="12" cy="12" r="4" />
+      <line x1="12" y1="2" x2="12" y2="8" />
+      <line x1="12" y1="16" x2="12" y2="22" />
+      <line x1="2" y1="12" x2="8" y2="12" />
+      <line x1="16" y1="12" x2="22" y2="12" />
+    </svg>
+  );
+}
+
+function IconSolution({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={C.textTertiary} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <line x1="10" y1="6.5" x2="14" y2="6.5" strokeDasharray="1.5 1.5" />
+      <line x1="10" y1="17.5" x2="14" y2="17.5" strokeDasharray="1.5 1.5" />
+      <line x1="6.5" y1="10" x2="6.5" y2="14" strokeDasharray="1.5 1.5" />
+      <line x1="17.5" y1="10" x2="17.5" y2="14" strokeDasharray="1.5 1.5" />
+    </svg>
+  );
+}
+
+function IconNetworking({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={C.text} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="5" r="2" />
+      <circle cx="5" cy="19" r="2" />
+      <circle cx="19" cy="19" r="2" />
+      <path d="M12 7v4" />
+      <path d="M12 11L5 17" />
+      <path d="M12 11l7 6" />
+      <path d="M8 12a8 8 0 0 1 8 0" strokeDasharray="2 2" />
+    </svg>
+  );
+}
+
+function IconSecurity({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={C.text} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  );
+}
+
+function IconCollaboration({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={C.text} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="7" r="3" />
+      <circle cx="17" cy="9" r="2.5" />
+      <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+      <path d="M17 11.5a3 3 0 0 1 3 3V17" />
+    </svg>
+  );
+}
+
+function IconInitiative({ size = 14 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={C.textTertiary} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+    </svg>
+  );
+}
+
+function IconUseCase({ size = 12 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={C.textTertiary} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="9 11 12 14 22 4" />
+      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+    </svg>
+  );
+}
+
+const productIcons = {
+  networking: IconNetworking,
+  security: IconSecurity,
+  collaboration: IconCollaboration,
+};
+
 // ─── FRAMEWORK DATA ────────────────────────────────────────────────────────────
 const fw = {
   company: {
-    purpose: "The macro unification narrative — why all of Cisco's portfolio is stronger together than any single piece.",
     headline: "One Cisco",
-    tagline: "The network. The security. The collaboration. One platform. One partner. One Cisco.",
-    description: "One Cisco reflects how Cisco uniquely combines networking, security, observability, and collaboration with AI embedded throughout — delivering compounding value that no point-solution vendor can match. When we combine two or three parts of Cisco, we are unbeatable. The breadth of the portfolio is the differentiator — positioned correctly.",
+    tagline: "One platform for the Agentic AI era.",
+    description: "Cisco uniquely combines networking, security, observability, and collaboration with AI embedded throughout — delivering compounding value as one unified platform. Under a single product organization led by the CPO, Cisco's portfolio breadth becomes its greatest differentiator. When customers combine two or three parts of Cisco, the result is unbeatable — no point-solution vendor can replicate it.",
   },
   solutionCategory: {
-    purpose: "Positions the solution category — the strategic 'why us' for customers modernizing campus, branch, and collaboration environments.",
-    headline: "Futureproof Workplace",
-    tagline: "Modernize how business happens, everywhere it happens.",
-    vision: "Cisco helps organizations create work environments that boost productivity, enhance employee and customer experience, and simplify IT — with networking, security, and collaboration unified on a single AI-powered platform.",
-    solution: "Only Cisco unifies campus and branch networking, secure connectivity, and collaboration into an integrated, AI-driven platform. By converging these domains, we eliminate the silos that drive complexity and cost — delivering consistent experiences for employees, customers, and IT teams across every location.",
+    headline: "Future-Proofed Workplaces",
+    tagline: "Modernize everywhere people work and connect.",
+    vision: "Cisco helps organizations create intelligent, secure, AI-ready work environments — with networking, security, observability, and collaboration unified on a single platform. Reduce costs, improve sustainability, attract the best talent, and prepare for a future where human workers and AI agents operate side by side.",
+    solution: "The AI-Ready Secure Network Architecture transforms campus, branch, and collaboration infrastructure through three pillars: AgenticOps that automate IT operations, security fused directly into the network fabric, and next-generation devices purpose-built for AI workloads.",
     pillars: [
-      { label: "Frictionless Experiences", icon: "✦" },
-      { label: "Productivity & Agility", icon: "✦" },
-      { label: "Safety & Security", icon: "✦" },
-      { label: "Efficiency & Cost Savings", icon: "✦" },
+      { label: "AgenticOps for Operational Simplicity" },
+      { label: "Security Fused into the Network" },
+      { label: "Devices Ready for AI" },
     ],
-  },
-  purposeLabels: {
-    product: "The specific product that solves a distinct problem within the Futureproof Workplace — the 'what we built.'",
-    initiative: "The buying triggers and IT/business budget categories that drive adoption of each product.",
-    project: "Real use cases that show how customers activate each initiative in their environment.",
   },
   products: [
     {
-      id: "meraki",
-      name: "Cisco Meraki",
-      subtitle: "Campus & Branch Networking",
-      tagline: "Simplify your network. Amplify your business.",
-      description: "Cisco Meraki delivers cloud-managed networking across campus and branch — unifying Wi-Fi, switching, SD-WAN, and security in a single dashboard. Now converging with Catalyst, Meraki gives IT teams the simplicity of cloud management with the power of enterprise-grade infrastructure, backed by AI-native assurance and ThousandEyes visibility.",
-      color: "#00AECD",
-      darkColor: "#005073",
-      bg: "#E8F8FC",
-      icon: "〇",
+      id: "networking",
+      name: "Cisco Networking",
+      subtitle: "Campus & Branch",
+      tagline: "The cloud-first foundation for your entire network.",
+      description: "Cisco unifies Meraki and Catalyst into a single networking platform — one hardware lineup, one licensing model, your choice of cloud or on-prem management. AI-native assurance from ThousandEyes, agentic operations via AI Canvas, and enterprise-grade Wi-Fi 7 deliver the infrastructure for the AI era.",
       initiatives: [
         {
-          id: "m1",
-          name: "AI-Powered Network Operations",
-          tagline: "From reactive to proactive, without the headcount.",
-          description: "AI Canvas and AgenticOps transform how IT teams manage campus and branch networks — automating routine tasks, proactively surfacing issues, and enabling non-specialist teams to operate at expert level. Meraki Dashboard + ThousandEyes + Splunk deliver end-to-end visibility in a single pane of glass.",
-          projects: [
-            { name: "AI Canvas for Campus/Branch", detail: "Conversational AI for network troubleshooting, provisioning, and optimization across Meraki and Catalyst" },
-            { name: "ThousandEyes Assurance", detail: "Real-time visibility into network performance from AP to application, including Microsoft Azure" },
-            { name: "AgenticOps Automation", detail: "Agentic AI that automates switch migrations, Wi-Fi setup, and device onboarding with a single prompt" },
-          ],
-        },
-        {
-          id: "m2",
-          name: "Secure Campus & Branch Access",
-          tagline: "Security embedded, not bolted on.",
-          description: "Cisco delivers a cloud-managed, identity-driven architecture that unites access control and cloud security within the Meraki Dashboard — addressing the dual challenge of securing an expanding attack surface with limited IT resources.",
-          projects: [
-            { name: "Cisco Access Manager", detail: "Identity-based access control via Meraki Dashboard — powered by ISE, deployed as SaaS, no hardware required" },
-            { name: "Hybrid Mesh Firewall", detail: "AI-driven security enforcement across Meraki, Catalyst, and ASA for consistent branch and campus protection" },
-            { name: "Zero Trust Branch (SASE)", detail: "Meraki SD-WAN integrated with Cisco Secure Access for full SASE coverage at every branch location" },
-          ],
-        },
-        {
-          id: "m3",
+          id: "n1",
           name: "Meraki + Catalyst Unification",
-          tagline: "One hardware. Your choice of management.",
-          description: "For years, organizations had to choose between Meraki's simplicity and Catalyst's enterprise power. Now they get both — unified hardware, licensing, and management in a 'pick how you want to deploy' model. Cloud-managed, on-prem, or hybrid. No compromise.",
+          tagline: "One network. One interface. Your choice of management.",
+          description: "Cisco converges its Meraki and Catalyst platforms — unified hardware (Smart Switches), unified licensing (Cisco Networking Subscription), and unified visibility (Global Overview dashboard). Deploy cloud-managed, on-prem, or hybrid with no compromise.",
           projects: [
-            { name: "Unified Hardware Platform", detail: "Cisco Smart Switches (9350/9610) manageable via Meraki Dashboard or Catalyst Center — same hardware, your choice" },
-            { name: "Global Overview Dashboard", detail: "Single cloud dashboard with direct visibility into both Meraki and Catalyst-managed networks" },
-            { name: "Cloud-Managed Fabric", detail: "Scalable, secure architecture that simplifies provisioning and management of large campus sites" },
+            { name: "Smart Switches (C9350/C9610)", detail: "Silicon One-powered switches manageable via Meraki Dashboard or Catalyst Center — same hardware, customer chooses" },
+            { name: "Global Overview Dashboard", detail: "Single cloud dashboard with direct visibility into both Meraki and Catalyst Center-managed networks" },
+            { name: "Cloud-Managed Fabric", detail: "Scalable, secure campus architecture with adaptive segmentation, simplified provisioning, and centralized management" },
+          ],
+        },
+        {
+          id: "n2",
+          name: "AI-Powered Network Operations",
+          tagline: "From reactive monitoring to autonomous action.",
+          description: "AgenticOps transforms IT operations with AI Canvas — the industry's first generative UI for cross-domain troubleshooting. The Cisco AI Assistant automates workflows across Meraki, Catalyst, SD-WAN, ISE, and Nexus — powered by the Deep Network Model trained on 40M+ tokens of CCIE-level expertise.",
+          projects: [
+            { name: "AI Canvas", detail: "Multiplayer generative workspace unifying NetOps, SecOps, and DevOps with real-time telemetry from Meraki, ThousandEyes, and Splunk" },
+            { name: "Cisco AI Assistant", detail: "Natural language automation for switch migration, Wi-Fi setup, device onboarding, and troubleshooting directly in the Meraki Dashboard" },
+            { name: "Workflows Engine", detail: "Low/no-code cross-domain automation spanning Meraki, Catalyst Center, SD-WAN Manager, ISE, Nexus, and third-party apps" },
+          ],
+        },
+        {
+          id: "n3",
+          name: "Wi-Fi 7 & Next-Gen Infrastructure",
+          tagline: "Enterprise-grade wireless for the AI era.",
+          description: "Cisco's Wi-Fi 7 portfolio delivers the bandwidth, latency, and reliability demanded by AI workloads, IoT devices, and hybrid workers — from flagship campus APs to distributed branch and industrial environments, all with embedded ThousandEyes synthetic testing.",
+          projects: [
+            { name: "Cisco Wireless 9179F Series", detail: "Flagship Wi-Fi 7 APs for stadiums, large venues, and high-density campus environments" },
+            { name: "Cisco Wireless 9172 Series", detail: "Enterprise Wi-Fi 7 for branches, stores, and clinics with built-in ThousandEyes active testing" },
+            { name: "Campus Gateway", detail: "Cloud-managed roaming and seamless connectivity across large campus deployments" },
           ],
         },
       ],
     },
     {
-      id: "sdwan",
-      name: "Catalyst SD-WAN",
-      subtitle: "Branch Connectivity & WAN",
-      tagline: "Connect every branch. Secure every path.",
-      description: "Cisco Catalyst SD-WAN connects distributed branches to cloud, data center, and campus resources with intelligent traffic management, embedded security, and centralized control. With Meraki SD-WAN now fully integrated into the same SASE framework, Cisco delivers consistent, policy-driven connectivity for every type of branch — from retail to healthcare to enterprise.",
-      color: "#6CC04A",
-      darkColor: "#3A7A28",
-      bg: "#EEF8E8",
-      icon: "◈",
+      id: "security",
+      name: "Cisco Security",
+      subtitle: "Secure Connectivity & Zero Trust",
+      tagline: "Security fused into the network. Not bolted on.",
+      description: "Cisco embeds multilayered security directly into the network fabric — every switch, router, and access point becomes an active enforcement point. Combined with SASE, Zero Trust, AI Defense, and post-quantum cryptography, Cisco delivers continuous, context-aware protection from edge to cloud for people, devices, and AI agents.",
       initiatives: [
         {
-          id: "s1",
-          name: "Branch Cloud Connectivity",
-          tagline: "Direct, secure, optimized access to everything.",
-          description: "As branches increasingly access SaaS, UCaaS, and cloud-hosted applications directly, Catalyst SD-WAN provides intelligent path selection, application-aware routing, and real-time performance optimization — eliminating the hairpinning and latency that degrade user experience.",
+          id: "se1",
+          name: "Hybrid Mesh Firewall",
+          tagline: "Firewall enforcement everywhere — not just at the perimeter.",
+          description: "Cisco extends firewall policy to switches, routers, workloads, and dedicated appliances. Security Cloud Control provides unified management with intent-based policy that works across Cisco and multi-vendor environments including Palo Alto, Fortinet, and Juniper.",
           projects: [
-            { name: "Application-Aware Routing", detail: "Dynamic path selection based on real-time app performance metrics across MPLS, broadband, and LTE" },
-            { name: "Direct Internet Access (DIA)", detail: "Secure, optimized SaaS breakout at the branch for Microsoft 365, Webex, and cloud apps" },
-            { name: "ThousandEyes Branch Monitoring", detail: "Proactive visibility into branch-to-cloud performance before users are impacted" },
+            { name: "Secure Firewall 200 Series", detail: "Branch-optimized NGFW with integrated SD-WAN at 3x price-performance in a compact form factor" },
+            { name: "Secure Firewall 6100 Series", detail: "Data center firewall delivering 200 Gbps/RU performance for AI workloads" },
+            { name: "Intent-Based Policy Management", detail: "Mesh Policy Engine in Security Cloud Control supporting multi-vendor firewall policy from a single console" },
           ],
         },
         {
-          id: "s2",
-          name: "Secure WAN with SASE",
-          tagline: "Network and security. Converged at the edge.",
-          description: "Cisco's SASE architecture delivers a seamless combination of network and security functionality through a single, cloud-native platform — extending Zero Trust to the WAN and ensuring every branch connection is authenticated, encrypted, and policy-compliant.",
+          id: "se2",
+          name: "SASE & Secure Access",
+          tagline: "Network and security converged. Cloud-delivered.",
+          description: "Cisco's SASE architecture pairs Catalyst or Meraki SD-WAN with Cisco Secure Access (SSE) — delivering ZTNA, SWG, CASB, and FWaaS. Now AI-aware with MCP visibility and intent-aware inspection of agentic workflows, plus post-quantum cryptography across the WAN.",
           projects: [
-            { name: "Cisco Secure Access (SASE)", detail: "Unified SASE platform integrating SD-WAN, SWG, CASB, and ZTNA for branch and remote users" },
-            { name: "Encrypted Traffic Analytics", detail: "AI-powered threat detection in encrypted WAN traffic without decryption" },
-            { name: "Zero Trust Network Access (ZTNA)", detail: "Identity-aware, least-privilege access replacing legacy VPN for branch workforces" },
+            { name: "Cisco Secure Access (SSE)", detail: "Cloud-delivered ZTNA, SWG, CASB, and FWaaS mapping to the CISA Zero Trust Maturity Model" },
+            { name: "AI-Aware SASE", detail: "Industry-first AI traffic detection, MCP protocol visibility, and intent-aware inspection for agentic workflows" },
+            { name: "Cisco 8000 Secure Routers", detail: "Single-box branch WAN with native SD-WAN, L7 NGFW, and post-quantum cryptography at 3x prior throughput" },
           ],
         },
         {
-          id: "s3",
-          name: "Branch Simplification & Automation",
-          tagline: "Deploy faster. Operate with less.",
-          description: "Cisco SD-WAN dramatically reduces the complexity of deploying and managing distributed branch infrastructure — from zero-touch provisioning to centralized policy management — freeing lean IT teams to focus on business outcomes rather than box management.",
+          id: "se3",
+          name: "Zero Trust & Identity",
+          tagline: "Verify everything. Trust nothing. Protect everyone.",
+          description: "Cisco's Zero Trust framework spans user and device security, network and cloud security, and application and data security — with Duo IAM handling identity brokering and passwordless authentication, and ISE providing network access control for people, devices, and AI agents.",
           projects: [
-            { name: "Zero-Touch Provisioning (ZTP)", detail: "Branches deploy automatically — ship hardware to site, plug in, and the network self-configures" },
-            { name: "Centralized Policy Management", detail: "Single control plane for routing, security, and QoS policy across all branch locations" },
-            { name: "5G Fixed Wireless Access", detail: "Meraki MG cellular gateways as primary or backup WAN — enterprise-grade 5G for any branch" },
+            { name: "Duo IAM", detail: "Full identity and access management with passwordless auth, identity routing engine, and proximity-based phishing resistance" },
+            { name: "Cisco ISE 3.5", detail: "Network access control bedrock supporting cloud-hosted deployments and zero trust segmentation across IT/OT" },
+            { name: "AI Defense", detail: "AI BOM for supply chain governance, MCP Catalog for agent risk, and runtime guardrails for agentic tool use" },
           ],
         },
       ],
     },
     {
-      id: "webex",
-      name: "Webex Suite",
-      subtitle: "Collaboration & Hybrid Work",
-      tagline: "Where people and AI work better together.",
-      description: "Webex is Cisco's AI-powered collaboration platform — unifying calling, meetings, messaging, devices, and contact center in a single suite. Webex is uniquely differentiated by its deep integration with the underlying Cisco network: IT admins can troubleshoot a poor call quality complaint and see correlated data from the Webex app, the Meraki AP, and the Catalyst switch — all in one interface.",
-      color: "#8B5CF6",
-      darkColor: "#5B21B6",
-      bg: "#F5F3FF",
-      icon: "◎",
+      id: "collaboration",
+      name: "Collaboration",
+      subtitle: "Webex & Intelligent Workspaces",
+      tagline: "Connected Intelligence — where people and AI work better together.",
+      description: "Cisco's Collaboration portfolio encompasses Webex Suite, Webex Calling, Webex Contact Center, purpose-built devices on RoomOS, and Cisco Spaces. The Connected Intelligence vision connects people to people, people to AI, and AI to AI — all secured on Cisco infrastructure and managed through Control Hub with full Meraki network correlation.",
       initiatives: [
         {
-          id: "w1",
-          name: "AI-Powered Meeting & Calling Experience",
-          tagline: "Every meeting smarter. Every call more productive.",
-          description: "Webex embeds AI into every interaction — delivering real-time summaries, translations, action items, and AI assistant capabilities across meetings, calling, and messaging. As the only vendor supporting cloud, on-prem, and hybrid calling, Cisco gives organizations a future-proof path regardless of where they are in their cloud journey.",
+          id: "c1",
+          name: "AI-Powered Meetings & Calling",
+          tagline: "Every interaction smarter. Every call more productive.",
+          description: "Webex embeds AI across every interaction — summaries, translations, action items, and agentic capabilities including Task Agent, Polling Agent, and Meeting Scheduler. As the only vendor supporting cloud, on-prem, and hybrid calling with full feature parity, Cisco gives organizations a future-proof path at any stage of their cloud journey.",
           projects: [
-            { name: "AI Assistant for Webex", detail: "Live and post-meeting summaries, action items, translations in 120 languages — available in meetings and calling" },
-            { name: "Webex Calling (Cloud/Hybrid/On-Prem)", detail: "The only vendor supporting all three deployment models with full feature parity and AI innovations" },
-            { name: "Cisco Call for Microsoft Teams", detail: "Full Webex Calling experience embedded natively in Microsoft Teams for organizations standardized on M365" },
+            { name: "AI Assistant for Webex", detail: "Real-time transcription, meeting summaries, action items, and catch-me-up in 50+ languages across meetings, calling, and messaging" },
+            { name: "Webex Calling", detail: "18M+ users across 190+ markets with 99.999% SLA — cloud, on-prem, or the industry-first Hybrid model" },
+            { name: "AI Receptionist", detail: "Always-on virtual receptionist powered by Webex AI Agent for automated call handling and scheduling" },
           ],
         },
         {
-          id: "w2",
+          id: "c2",
           name: "Intelligent Workspaces & Devices",
           tagline: "Bring people back to the office — on purpose.",
-          description: "Cisco collaboration devices transform physical workspaces into intelligent, AI-powered environments — drawing employees back to the office by delivering meeting experiences that are more productive than joining from a laptop. From Room Bars to Ceiling Microphone Pro, every device is designed to make in-room participants equal to remote ones.",
+          description: "Cisco collaboration devices run RoomOS 26 with NVIDIA GPUs — transforming rooms into AI-powered environments with Director Agent for cinematic camera views, Audio Zones for precision capture, and Notetaker Agent for in-room transcription. Named market leader in Omdia's 2025 Smart Collaboration Devices universe.",
           projects: [
-            { name: "Cisco Room Portfolio", detail: "Wi-Fi 7 APs, Room Bars, Boards, and Desk devices purpose-built for every workspace — boardroom to huddle" },
-            { name: "Cisco Spaces + Workspace Intelligence", detail: "Buildings transformed into smart spaces with occupancy sensing, desk booking, and space optimization" },
-            { name: "Control Hub + Meraki Integration", detail: "IT admins see full call paths with Meraki AP performance data correlated to Webex call quality" },
+            { name: "Room Bar Pro & Room Vision PTZ", detail: "Dual 48MP AI cameras with motorized tilt and cinematic multi-camera tracking for immersive meeting experiences" },
+            { name: "Ceiling Microphone Pro", detail: "64 mic elements, eight adaptive AI beams, 3.5m pickup radius with Audio Zones for digital sound boundaries" },
+            { name: "Cisco Spaces", detail: "Smart workspace platform with occupancy sensing, desk booking, space optimization, and automated sustainability controls" },
           ],
         },
         {
-          id: "w3",
-          name: "Hybrid Work Employee Experience",
-          tagline: "Consistent, secure, and seamless — wherever work happens.",
-          description: "The new workforce expects the same experience whether they're in a Cisco-equipped headquarters, a home office, or a branch. Webex Suite delivers consistency across every environment — with enterprise security, compliance, and manageability baked in, not bolted on.",
+          id: "c3",
+          name: "Contact Center & Customer Experience",
+          tagline: "Transform every customer interaction with AI.",
+          description: "Webex Contact Center infuses AI across the customer journey — from Webex AI Agent for autonomous self-service to real-time agent assist and AI-powered quality management. Multi-agent collaboration via A2A and MCP protocols enables next-generation CX workflows.",
           projects: [
-            { name: "Webex Suite (Unified Collaboration)", detail: "Calling, meetings, messaging, webinars, and polling in one app — reducing app sprawl and licensing cost" },
-            { name: "BYOD & Mobile-First Experiences", detail: "Enterprise-grade Webex Calling on personal devices, expanding globally via Certified Mobile Calling Providers" },
-            { name: "Employee Wellbeing & Inclusion", detail: "AI features designed to reduce meeting fatigue — async video, intelligent summaries, and well-being analytics" },
+            { name: "Webex AI Agent", detail: "Autonomous and guided self-service with natural language understanding, intent routing, and multi-agent orchestration" },
+            { name: "AI Assistant for Contact Center", detail: "Suggested responses, real-time transcription, mid-call summaries, and automated wrap-up for agents" },
+            { name: "Webex Contact Center for Salesforce", detail: "Native CRM integration with multi-agent collaboration via A2A and MCP protocols" },
           ],
         },
       ],
     },
   ],
 };
+
 // ─── COMPONENTS ────────────────────────────────────────────────────────────────
-function TierRow({ tier, color, purpose }) {
+
+function Connector() {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-      <span style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: 8, letterSpacing: 2.5, fontWeight: 800,
-        color, textTransform: "uppercase", whiteSpace: "nowrap",
-        background: `${color}12`, padding: "3px 8px",
-        borderRadius: 3, border: `1px solid ${color}28`,
-        minWidth: "fit-content",
-      }}>{tier}</span>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: "#94A3B8", fontStyle: "italic", lineHeight: 1.4 }}>{purpose}</span>
+    <div style={{ display: "flex", justifyContent: "center", padding: "6px 0" }}>
+      <div style={{ width: 1, height: 32, background: C.border }} />
     </div>
   );
 }
-function DownArrow({ color = "#CBD5E1" }) {
+
+function SplitConnector() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", height: 32, justifyContent: "center" }}>
-      <div style={{ width: 1.5, height: 22, background: `linear-gradient(to bottom, ${color}44, ${color})` }} />
-      <div style={{ width: 0, height: 0, borderLeft: "5px solid transparent", borderRight: "5px solid transparent", borderTop: `7px solid ${color}` }} />
-    </div>
-  );
-}
-function SplitArrow({ color = "#CBD5E1" }) {
-  return (
-    <div style={{ position: "relative", height: 44 }}>
-      <svg width="100%" height="44" preserveAspectRatio="none">
-        <line x1="50%" y1="0" x2="50%" y2="16" stroke={color} strokeWidth="1.5" />
-        <line x1="16.7%" y1="16" x2="83.3%" y2="16" stroke={color} strokeWidth="1.5" />
+    <div style={{ position: "relative", height: 40 }}>
+      <svg width="100%" height="40" preserveAspectRatio="none">
+        <line x1="50%" y1="0" x2="50%" y2="14" stroke={C.border} strokeWidth="1" />
+        <line x1="16.7%" y1="14" x2="83.3%" y2="14" stroke={C.border} strokeWidth="1" />
         {[16.7, 50, 83.3].map((p, i) => (
-          <g key={i}>
-            <line x1={`${p}%`} y1="16" x2={`${p}%`} y2="37" stroke={color} strokeWidth="1.5" />
-          </g>
+          <line key={i} x1={`${p}%`} y1="14" x2={`${p}%`} y2="40" stroke={C.border} strokeWidth="1" />
         ))}
-        <polygon points="10.7%,37 22.7%,37 16.7%,44" fill={color} />
-        <polygon points="44%,37 56%,37 50%,44" fill={color} />
-        <polygon points="77.3%,37 89.3%,37 83.3%,44" fill={color} />
       </svg>
     </div>
   );
 }
+
+function TierLabel({ icon, children }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+      {icon}
+      <span style={{
+        fontSize: 10, letterSpacing: 3, fontWeight: 500,
+        color: C.textTertiary, textTransform: "uppercase",
+      }}>{children}</span>
+    </div>
+  );
+}
+
 export default function App() {
-  const [expandCompany, setExpandCompany]   = useState(false);
+  const [isDark, setIsDark] = useState(false);
+  C = isDark ? dark : light;
+  const [expandCompany, setExpandCompany] = useState(false);
   const [expandSolution, setExpandSolution] = useState(false);
-  const [activeProduct, setActiveProduct]   = useState("meraki");
-  const [expandedInit, setExpandedInit]     = useState({});
+  const [activeProduct, setActiveProduct] = useState("networking");
+  const [expandedInit, setExpandedInit] = useState({});
+
   const product = fw.products.find(p => p.id === activeProduct);
   const toggleInit = (id) => setExpandedInit(prev => ({ ...prev, [id]: !prev[id] }));
+
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#F0F4F8", minHeight: "100vh", color: CISCO_DARK }}>
+    <div style={{
+      fontFamily: "-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      background: C.bg, minHeight: "100vh", color: C.text,
+      WebkitFontSmoothing: "antialiased",
+    }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        * { box-sizing: border-box; }
-        .hov { transition: box-shadow 0.18s, border-color 0.18s; cursor: pointer; }
-        .hov:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.11) !important; }
-        .prod-btn { transition: all 0.18s; cursor: pointer; border: none; outline: none; }
-        .prod-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .card { transition: all 0.2s ease; cursor: pointer; }
+        .card:hover { background: ${C.accentSoft} !important; }
+        .tab { transition: all 0.15s ease; cursor: pointer; border: none; outline: none; background: none; }
+        .tab:hover { color: ${C.text} !important; }
       `}</style>
+
       {/* ── HEADER ── */}
-      <div style={{
-        background: `linear-gradient(135deg, ${CISCO_DARK} 0%, ${CISCO_MID} 60%, ${CISCO_BLUE} 100%)`,
-        padding: "36px 48px 32px",
-        position: "relative", overflow: "hidden",
+      <header style={{
+        padding: "52px 64px 44px",
+        maxWidth: 1200, margin: "0 auto",
+        borderBottom: `1px solid ${C.border}`,
       }}>
-        <div style={{ position: "absolute", top: -60, right: -60, width: 280, height: 280, borderRadius: "50%", background: `radial-gradient(circle, ${CISCO_BLUE}18 0%, transparent 70%)` }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
-          {/* Cisco logo wordmark approximation */}
-          <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-            {[1,2,3,4,5,6].map(i => (
-              <div key={i} style={{
-                width: i === 1 || i === 6 ? 6 : 7,
-                height: i === 1 || i === 6 ? 14 : i === 2 || i === 5 ? 18 : 20,
-                borderRadius: 3,
-                background: CISCO_BLUE,
-                opacity: i === 1 || i === 6 ? 0.6 : i === 2 || i === 5 ? 0.8 : 1,
-              }} />
-            ))}
-          </div>
-          <span style={{ fontFamily: "'Inter'", fontSize: 10, letterSpacing: 4, fontWeight: 800, color: "rgba(255,255,255,0.45)", textTransform: "uppercase" }}>
-            Corporate Messaging Framework
-          </span>
+        <div style={{ marginBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <CiscoLogo width={90} style={{ filter: C.logoInvert }} />
+          <button
+            onClick={() => setIsDark(d => !d)}
+            aria-label="Toggle dark mode"
+            style={{
+              background: "none", border: `1px solid ${C.border}`, borderRadius: 20,
+              width: 44, height: 24, position: "relative", cursor: "pointer",
+              transition: "border-color 0.3s",
+            }}
+          >
+            <span style={{
+              position: "absolute", top: 3, left: isDark ? 22 : 3,
+              width: 16, height: 16, borderRadius: "50%",
+              background: C.text, transition: "left 0.3s ease",
+            }} />
+          </button>
         </div>
-        <h1 style={{ fontFamily: "'Inter'", fontSize: "clamp(26px,4vw,44px)", fontWeight: 900, color: "#fff", margin: "0 0 4px", letterSpacing: "-1px" }}>
+        <TierLabel>Corporate Messaging Framework</TierLabel>
+        <h1 style={{
+          fontSize: 48, fontWeight: 300, letterSpacing: "-1.5px",
+          color: C.text, margin: "12px 0 0", lineHeight: 1.1,
+        }}>
           Futureproof Workplace
         </h1>
-        <p style={{ fontFamily: "'Inter'", fontSize: 13, color: "rgba(255,255,255,0.45)", margin: 0, fontWeight: 300, letterSpacing: 0.3 }}>
-          Campus &amp; Branch Networking · Collaboration · One Cisco Platform
-        </p>
-      </div>
-      <div style={{ padding: "36px 48px 64px", maxWidth: 1120, margin: "0 auto" }}>
+      </header>
+
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 64px 96px" }}>
+
         {/* ── TIER 1: ONE CISCO ── */}
-        <TierRow tier="Company Level" color={CISCO_DARK} purpose={fw.company.purpose} />
-        <div className="hov" onClick={() => setExpandCompany(!expandCompany)} style={{
-          background: CISCO_DARK,
-          borderRadius: 12,
-          padding: "22px 28px",
-          boxShadow: "0 4px 24px rgba(0,38,43,0.2)",
-          border: `2px solid ${expandCompany ? CISCO_BLUE : "#0D3A42"}`,
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ marginBottom: 6 }}>
+          <TierLabel icon={<IconCompany size={16} />}>Company</TierLabel>
+        </div>
+        <div
+          className="card"
+          onClick={() => setExpandCompany(!expandCompany)}
+          style={{
+            padding: "28px 32px",
+            border: `1px solid ${C.border}`,
+            borderRadius: 2,
+            background: C.bg,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <div>
-              <p style={{ fontFamily: "'Inter'", fontSize: 9, letterSpacing: 3, fontWeight: 800, color: CISCO_BLUE, margin: "0 0 6px", textTransform: "uppercase" }}>Company Messaging</p>
-              <h2 style={{ fontFamily: "'Inter'", fontSize: "clamp(22px,3vw,36px)", fontWeight: 900, color: "#fff", margin: "0 0 6px", letterSpacing: "-0.5px" }}>
+              <h2 style={{ fontSize: 28, fontWeight: 300, letterSpacing: "-0.5px", marginBottom: 6 }}>
                 {fw.company.headline}
               </h2>
-              <p style={{ fontFamily: "'Inter'", fontSize: 13, color: CISCO_BLUE, margin: 0, fontStyle: "italic", fontWeight: 400 }}>
-                &ldquo;{fw.company.tagline}&rdquo;
+              <p style={{ fontSize: 14, color: C.textSecondary, fontWeight: 300 }}>
+                {fw.company.tagline}
               </p>
             </div>
-            <span style={{ color: CISCO_BLUE, fontSize: 18, marginLeft: 20, display: "inline-block", transform: expandCompany ? "rotate(180deg)" : "none", transition: "transform 0.3s" }}>▾</span>
+            <span style={{
+              fontSize: 20, color: C.textTertiary, fontWeight: 200,
+              transform: expandCompany ? "rotate(180deg)" : "none",
+              transition: "transform 0.3s", display: "inline-block",
+            }}>&#8964;</span>
           </div>
           {expandCompany && (
-            <p style={{ fontFamily: "'Inter'", fontSize: 13, color: "#94A3B8", lineHeight: 1.8, margin: "18px 0 0", paddingTop: 18, borderTop: "1px solid #0D3A42" }}>
+            <p style={{
+              fontSize: 14, color: C.textSecondary, lineHeight: 1.8,
+              marginTop: 20, paddingTop: 20,
+              borderTop: `1px solid ${C.borderLight}`, fontWeight: 300,
+            }}>
               {fw.company.description}
             </p>
           )}
         </div>
-        <DownArrow color="#93C5D5" />
-        {/* ── TIER 2: FUTUREPROOF WORKPLACE ── */}
-        <TierRow tier="Solution Category" color={CISCO_MID} purpose={fw.solutionCategory.purpose} />
-        <div className="hov" onClick={() => setExpandSolution(!expandSolution)} style={{
-          background: "#fff",
-          borderRadius: 12,
-          padding: "22px 28px",
-          boxShadow: "0 3px 16px rgba(0,80,115,0.08)",
-          border: `2px solid ${expandSolution ? CISCO_MID : "#C0DDE8"}`,
-          borderLeft: `5px solid ${CISCO_MID}`,
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontFamily: "'Inter'", fontSize: 9, letterSpacing: 3, fontWeight: 800, color: CISCO_MID, margin: "0 0 4px", textTransform: "uppercase" }}>Solution Category</p>
-              <h2 style={{ fontFamily: "'Inter'", fontSize: "clamp(18px,2.5vw,28px)", fontWeight: 800, color: CISCO_DARK, margin: "0 0 4px", letterSpacing: "-0.3px" }}>
+
+        <Connector />
+
+        {/* ── TIER 2: SOLUTION CATEGORY ── */}
+        <div style={{ marginBottom: 6 }}>
+          <TierLabel icon={<IconSolution size={16} />}>Solution Category</TierLabel>
+        </div>
+        <div
+          className="card"
+          onClick={() => setExpandSolution(!expandSolution)}
+          style={{
+            padding: "28px 32px",
+            border: `1px solid ${C.border}`,
+            borderRadius: 2,
+            background: C.bg,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <div>
+              <h2 style={{ fontSize: 28, fontWeight: 300, letterSpacing: "-0.5px", marginBottom: 6 }}>
                 {fw.solutionCategory.headline}
               </h2>
-              <p style={{ fontFamily: "'Inter'", fontSize: 13, color: CISCO_BLUE, margin: "0 0 14px", fontStyle: "italic" }}>
-                &ldquo;{fw.solutionCategory.tagline}&rdquo;
+              <p style={{ fontSize: 14, color: C.textSecondary, fontWeight: 300, marginBottom: 16 }}>
+                {fw.solutionCategory.tagline}
               </p>
-              {/* Solution pillars */}
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: 6 }}>
                 {fw.solutionCategory.pillars.map((p, i) => (
-                  <div key={i} style={{
-                    background: "#EBF6FA", border: `1px solid #C0DDE8`,
-                    borderRadius: 20, padding: "4px 12px",
-                    fontFamily: "'Inter'", fontSize: 11, fontWeight: 600, color: CISCO_MID,
+                  <span key={i} style={{
+                    fontSize: 11, fontWeight: 400, color: C.textSecondary,
+                    padding: "4px 12px", border: `1px solid ${C.border}`,
+                    borderRadius: 100,
                   }}>
                     {p.label}
-                  </div>
+                  </span>
                 ))}
               </div>
             </div>
-            <span style={{ color: CISCO_MID, fontSize: 18, marginLeft: 20, display: "inline-block", transform: expandSolution ? "rotate(180deg)" : "none", transition: "transform 0.3s", flexShrink: 0 }}>▾</span>
+            <span style={{
+              fontSize: 20, color: C.textTertiary, fontWeight: 200,
+              transform: expandSolution ? "rotate(180deg)" : "none",
+              transition: "transform 0.3s", display: "inline-block", flexShrink: 0,
+            }}>&#8964;</span>
           </div>
           {expandSolution && (
-            <div style={{ marginTop: 18, paddingTop: 18, borderTop: "1px solid #EBF6FA" }}>
-              <p style={{ fontFamily: "'Inter'", fontSize: 9, fontWeight: 700, color: CISCO_MID, margin: "0 0 6px", textTransform: "uppercase", letterSpacing: 1.5 }}>Vision</p>
-              <p style={{ fontFamily: "'Inter'", fontSize: 13, color: "#334155", lineHeight: 1.8, margin: "0 0 16px" }}>{fw.solutionCategory.vision}</p>
-              <p style={{ fontFamily: "'Inter'", fontSize: 9, fontWeight: 700, color: CISCO_MID, margin: "0 0 6px", textTransform: "uppercase", letterSpacing: 1.5 }}>Solution Narrative</p>
-              <p style={{ fontFamily: "'Inter'", fontSize: 13, color: "#334155", lineHeight: 1.8, margin: 0 }}>{fw.solutionCategory.solution}</p>
+            <div style={{ marginTop: 24, paddingTop: 24, borderTop: `1px solid ${C.borderLight}` }}>
+              <p style={{ fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 }}>Vision</p>
+              <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300, marginBottom: 20 }}>{fw.solutionCategory.vision}</p>
+              <p style={{ fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 }}>Solution Narrative</p>
+              <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 }}>{fw.solutionCategory.solution}</p>
             </div>
           )}
         </div>
-        <SplitArrow color="#93C5D5" />
-        {/* ── TIER 3: PRODUCT SELECTOR ── */}
-        <TierRow tier="Product Level" color="#374151" purpose={fw.purposeLabels.product} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+
+        <SplitConnector />
+
+        {/* ── TIER 3: PRODUCTS ── */}
+        <div style={{ marginBottom: 8 }}>
+          <TierLabel>Product</TierLabel>
+        </div>
+
+        {/* Product tabs */}
+        <div style={{
+          display: "flex", gap: 0,
+          borderBottom: `1px solid ${C.border}`,
+          marginBottom: 0,
+        }}>
           {fw.products.map(p => {
             const isActive = activeProduct === p.id;
+            const Icon = productIcons[p.id];
             return (
-              <button key={p.id} className="prod-btn" onClick={() => setActiveProduct(p.id)} style={{
-                background: isActive ? p.color : "#fff",
-                border: `2px solid ${isActive ? p.color : "#D1D5DB"}`,
-                borderBottom: isActive ? `2px solid ${p.color}` : `2px solid #D1D5DB`,
-                borderRadius: isActive ? "10px 10px 0 0" : 10,
-                padding: "16px 20px",
-                textAlign: "left",
-                boxShadow: isActive ? `0 4px 20px ${p.color}35` : "0 2px 8px rgba(0,0,0,0.05)",
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{
-                    width: 36, height: 36, borderRadius: 8,
-                    background: isActive ? "rgba(255,255,255,0.2)" : `${p.color}15`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 16, color: isActive ? "#fff" : p.color, fontWeight: 900,
-                  }}>
-                    {p.icon}
-                  </div>
-                  <div>
-                    <p style={{ fontFamily: "'Inter'", fontSize: 14, fontWeight: 800, color: isActive ? "#fff" : CISCO_DARK, margin: 0, letterSpacing: "-0.2px" }}>{p.name}</p>
-                    <p style={{ fontFamily: "'Inter'", fontSize: 10, color: isActive ? "rgba(255,255,255,0.65)" : p.color, margin: "2px 0 0", fontWeight: 600, letterSpacing: 0.3 }}>{p.subtitle}</p>
-                  </div>
-                </div>
+              <button
+                key={p.id}
+                className="tab"
+                onClick={() => setActiveProduct(p.id)}
+                style={{
+                  padding: "14px 28px",
+                  fontSize: 14, fontWeight: isActive ? 500 : 300,
+                  color: isActive ? C.text : C.textTertiary,
+                  borderBottom: isActive ? `2px solid ${C.text}` : "2px solid transparent",
+                  marginBottom: -1,
+                  fontFamily: "inherit",
+                  display: "flex", alignItems: "center", gap: 8,
+                }}
+              >
+                <Icon size={16} />
+                {p.name}
               </button>
             );
           })}
         </div>
-        {/* ── ACTIVE PRODUCT PANEL ── */}
+
+        {/* ── ACTIVE PRODUCT ── */}
         {product && (
           <div style={{
-            border: `2px solid ${product.color}`,
+            border: `1px solid ${C.border}`,
             borderTop: "none",
-            borderRadius: "0 0 12px 12px",
-            background: "#fff",
-            boxShadow: `0 8px 32px ${product.color}20`,
+            borderRadius: "0 0 2px 2px",
+            background: C.bg,
           }}>
             {/* Product description */}
-            <div style={{ padding: "20px 26px 18px", borderBottom: `1px solid ${product.color}20`, background: product.bg }}>
-              <p style={{ fontFamily: "'Inter'", fontSize: 12, fontStyle: "italic", color: product.color, fontWeight: 600, margin: "0 0 6px" }}>
-                &ldquo;{product.tagline}&rdquo;
+            <div style={{ padding: "32px 32px 28px" }}>
+              <p style={{ fontSize: 15, color: C.textSecondary, fontStyle: "italic", fontWeight: 300, marginBottom: 12 }}>
+                {product.tagline}
               </p>
-              <p style={{ fontFamily: "'Inter'", fontSize: 13, color: "#475569", margin: 0, lineHeight: 1.75 }}>
+              <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 }}>
                 {product.description}
               </p>
             </div>
-            {/* Initiatives + Projects */}
-            <div style={{ padding: "20px 26px 26px" }}>
-              <div style={{ display: "flex", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
-                <TierRow tier="Initiative Level" color="#6B7280" purpose={fw.purposeLabels.initiative} />
+
+            <div style={{ height: 1, background: C.borderLight, margin: "0 32px" }} />
+
+            {/* Initiatives */}
+            <div style={{ padding: "28px 32px 36px" }}>
+              <div style={{ marginBottom: 20 }}>
+                <TierLabel icon={<IconInitiative size={14} />}>Initiatives</TierLabel>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: C.border, border: `1px solid ${C.border}`, borderRadius: 2, overflow: "hidden" }}>
                 {product.initiatives.map(init => {
                   const isOpen = !!expandedInit[init.id];
                   return (
-                    <div key={init.id} style={{ display: "flex", flexDirection: "column" }}>
-                      {/* Initiative */}
-                      <div className="hov" onClick={() => toggleInit(init.id)} style={{
-                        background: product.color,
-                        borderRadius: "8px 8px 0 0",
-                        padding: "14px 16px",
-                        boxShadow: `0 3px 12px ${product.color}30`,
-                      }}>
+                    <div key={init.id} style={{ background: C.bg, display: "flex", flexDirection: "column" }}>
+                      {/* Initiative header */}
+                      <div
+                        className="card"
+                        onClick={() => toggleInit(init.id)}
+                        style={{
+                          padding: "20px 20px 16px",
+                          background: C.bg,
+                          borderRadius: 0,
+                        }}
+                      >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                           <div style={{ flex: 1 }}>
-                            <p style={{ fontFamily: "'Inter'", fontSize: 8, letterSpacing: 2, fontWeight: 800, color: "rgba(255,255,255,0.5)", margin: "0 0 5px", textTransform: "uppercase" }}>Initiative</p>
-                            <p style={{ fontFamily: "'Inter'", fontSize: 13, fontWeight: 700, color: "#fff", margin: "0 0 3px", lineHeight: 1.3 }}>{init.name}</p>
-                            <p style={{ fontFamily: "'Inter'", fontSize: 11, color: "rgba(255,255,255,0.68)", margin: 0, fontStyle: "italic" }}>{init.tagline}</p>
+                            <p style={{ fontSize: 14, fontWeight: 500, color: C.text, marginBottom: 4, lineHeight: 1.35 }}>
+                              {init.name}
+                            </p>
+                            <p style={{ fontSize: 12, color: C.textTertiary, fontWeight: 300 }}>
+                              {init.tagline}
+                            </p>
                           </div>
-                          <span style={{ color: "rgba(255,255,255,0.65)", fontSize: 13, marginLeft: 6, display: "inline-block", transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.25s", flexShrink: 0 }}>▾</span>
+                          <span style={{
+                            fontSize: 16, color: C.textTertiary, fontWeight: 200, marginLeft: 8,
+                            transform: isOpen ? "rotate(180deg)" : "none",
+                            transition: "transform 0.2s", display: "inline-block", flexShrink: 0,
+                          }}>&#8964;</span>
                         </div>
                         {isOpen && (
-                          <p style={{ fontFamily: "'Inter'", fontSize: 11, color: "rgba(255,255,255,0.82)", lineHeight: 1.7, margin: "12px 0 0", paddingTop: 10, borderTop: "1px solid rgba(255,255,255,0.18)" }}>
+                          <p style={{
+                            fontSize: 13, color: C.textSecondary, lineHeight: 1.7, fontWeight: 300,
+                            marginTop: 12, paddingTop: 12, borderTop: `1px solid ${C.borderLight}`,
+                          }}>
                             {init.description}
                           </p>
                         )}
                       </div>
-                      {/* Projects */}
-                      <div style={{
-                        border: `1.5px solid ${product.color}30`, borderTop: "none",
-                        borderRadius: "0 0 8px 8px", overflow: "hidden",
-                        background: product.bg, flex: 1,
-                      }}>
-                        <div style={{ padding: "5px 12px 4px", borderBottom: `1px solid ${product.color}18` }}>
-                          <span style={{ fontFamily: "'Inter'", fontSize: 8, letterSpacing: 2, fontWeight: 800, color: product.darkColor, textTransform: "uppercase", opacity: 0.7 }}>
+
+                      {/* Use cases */}
+                      <div style={{ borderTop: `1px solid ${C.borderLight}`, flex: 1 }}>
+                        <div style={{ padding: "8px 20px 4px", display: "flex", alignItems: "center", gap: 5 }}>
+                          <IconUseCase size={11} />
+                          <span style={{ fontSize: 9, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase" }}>
                             Use Cases
                           </span>
                         </div>
                         {init.projects.map((proj, i) => (
-                          <div key={i} style={{ padding: "9px 12px", borderBottom: i < init.projects.length - 1 ? `1px solid ${product.color}18` : "none" }}>
-                            <p style={{ fontFamily: "'Inter'", fontSize: 12, fontWeight: 700, color: "#1E293B", margin: "0 0 2px" }}>{proj.name}</p>
-                            <p style={{ fontFamily: "'Inter'", fontSize: 11, color: "#64748B", margin: 0, lineHeight: 1.5 }}>{proj.detail}</p>
+                          <div key={i} style={{
+                            padding: "10px 20px",
+                            borderTop: i > 0 ? `1px solid ${C.borderLight}` : "none",
+                          }}>
+                            <p style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{proj.name}</p>
+                            <p style={{ fontSize: 12, color: C.textTertiary, lineHeight: 1.5, fontWeight: 300 }}>{proj.detail}</p>
                           </div>
                         ))}
                       </div>
@@ -440,11 +583,13 @@ export default function App() {
             </div>
           </div>
         )}
+
         {/* ── FOOTER ── */}
-        <div style={{ marginTop: 40, padding: "14px 20px", background: "#E8F4F8", borderRadius: 8, borderLeft: `4px solid ${CISCO_BLUE}` }}>
-          <p style={{ fontFamily: "'Inter'", fontSize: 11, color: "#5B8A96", margin: 0, lineHeight: 1.6 }}>
-            <strong style={{ color: CISCO_MID }}>Architecture:</strong> Company (One Cisco) → Solution Category (Futureproof Workplace) → Product ×3 (Meraki, Catalyst SD-WAN, Webex) → Initiative ×3 → Use Case ×3. Select a product to explore its initiatives. Click any initiative to expand its messaging detail.
+        <div style={{ marginTop: 48, paddingTop: 24, borderTop: `1px solid ${C.borderLight}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <p style={{ fontSize: 12, color: C.textTertiary, fontWeight: 300, lineHeight: 1.6 }}>
+            Company &rarr; Solution Category &rarr; Product &times;3 &rarr; Initiative &times;3 &rarr; Use Case &times;3
           </p>
+          <CiscoLogo width={48} style={{ filter: C.logoInvert }} />
         </div>
       </div>
     </div>
