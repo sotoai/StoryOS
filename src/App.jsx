@@ -600,6 +600,146 @@ const verticals = {
   },
 };
 
+// ─── TAGS TAXONOMY (cross-page tagging system) ──────────────────────────────────
+const tagsDef = {
+  products: { networking: "Networking", collaboration: "Collaboration" },
+  initiatives: {
+    n1: "Meraki + Catalyst Unification", n2: "AgenticOps", n3: "Wi-Fi 7 & Secure Infra",
+    c1: "AI Meetings & Calling", c2: "Intelligent Workspaces", c3: "Contact Center & CX",
+  },
+  verticals: { general: "General", healthcare: "Healthcare", education: "Education", government: "Government", manufacturing: "Manufacturing", retail: "Retail", financial: "Financial Services" },
+  buyerRoles: {
+    cio: "CIO / CTO", ciso: "CISO", cfo: "CFO / Procurement",
+    vpIt: "VP of IT", vpSecurity: "VP of Security", vpWorkplace: "VP of Workplace",
+    nb1: "Network Architect", nb2: "Network Ops Manager", nb3: "IT Director",
+    cb1: "UC Director", cb2: "Workplace Experience Mgr", cb3: "CX Director",
+  },
+};
+
+// ─── STORIES DATA ────────────────────────────────────────────────────────────────
+const stories = [
+  {
+    id: "st-1", customer: "Mercy Health System", industry: "healthcare",
+    summary: "Unified 200+ clinical sites on Meraki cloud-managed networking with AI-driven operations.",
+    problem: "Mercy operated a fragmented network across 200+ clinical sites spanning four states. Each facility ran different hardware generations with separate management consoles, creating blind spots in patient-critical applications and a mean time to repair exceeding 4 hours. Compliance audits flagged inconsistent security policies across sites.",
+    solution: "Cisco deployed a unified Meraki + Catalyst networking fabric across all sites with a single cloud dashboard for visibility. AI Canvas provided autonomous root-cause analysis for application performance issues, while embedded zero-trust security enforced consistent policies hospital-wide. ThousandEyes integration delivered end-to-end monitoring from the EHR application through to the clinical endpoint.",
+    outcome: "Mean time to repair dropped 40% in the first quarter. The unified licensing model saved $2.1M annually in operational costs. Security audit findings decreased by 65%, and network uptime exceeded 99.97% across all clinical sites.",
+    metrics: [{ value: "40%", label: "MTTR reduction" }, { value: "$2.1M", label: "Annual savings" }, { value: "200+", label: "Sites unified" }],
+    tags: { products: ["networking"], initiatives: ["n1", "n2"], verticals: ["healthcare"], buyerRoles: ["cio", "nb2", "nb3"] },
+    videoUrl: null, deckSlideCount: 12, date: "2025-11",
+  },
+  {
+    id: "st-2", customer: "Stanford Children's Health", industry: "healthcare",
+    summary: "Transformed hybrid care delivery with AI-powered telehealth and smart clinical spaces.",
+    problem: "Stanford Children's struggled with fragmented video platforms for telehealth visits. Clinicians used three different tools for patient consultations, internal meetings, and family conferences. Room systems were underutilized at 30% occupancy, and families in rural areas reported poor telehealth quality.",
+    solution: "Cisco deployed Webex-powered telehealth across all departments with AI-driven noise removal and real-time translation for multilingual families. Smart room systems with RoomOS and occupancy sensors optimized clinical space usage. AI Assistant provided automatic transcription and clinical summary drafts for provider documentation.",
+    outcome: "Telehealth visit completion rates increased from 72% to 94%. Room utilization improved to 68%. Clinicians saved an average of 12 minutes per encounter on documentation through AI-assisted summaries, reclaiming over 15,000 clinical hours annually.",
+    metrics: [{ value: "94%", label: "Visit completion" }, { value: "68%", label: "Room utilization" }, { value: "15K hrs", label: "Time reclaimed" }],
+    tags: { products: ["collaboration"], initiatives: ["c1", "c2"], verticals: ["healthcare"], buyerRoles: ["cb1", "cb2"] },
+    videoUrl: null, deckSlideCount: 10, date: "2025-09",
+  },
+  {
+    id: "st-3", customer: "Broward County Public Schools", industry: "education",
+    summary: "Modernized networking for 270 schools with Wi-Fi 7 and unified cloud management.",
+    problem: "Broward County's aging network infrastructure couldn't support the explosion of student devices and cloud-based learning applications across 270 schools. Peak-hour Wi-Fi congestion caused application timeouts, and the IT team of 15 managed 40,000+ access points with no centralized visibility.",
+    solution: "Cisco provided a phased Wi-Fi 7 rollout with dual-mode access points manageable through either Meraki Dashboard or Catalyst Center. The Cisco Networking Subscription consolidated licensing across wireless, switching, and WAN. Zero-touch provisioning enabled the small IT team to deploy new schools in under 48 hours.",
+    outcome: "Student application timeouts decreased by 85%. The IT team deployed 12 new school sites in one semester with zero on-site visits. Annual networking costs decreased 30% through consolidated subscriptions, and the district passed its first clean E-Rate audit in three years.",
+    metrics: [{ value: "85%", label: "Fewer timeouts" }, { value: "30%", label: "Cost reduction" }, { value: "270", label: "Schools connected" }],
+    tags: { products: ["networking"], initiatives: ["n1", "n3"], verticals: ["education"], buyerRoles: ["nb1", "nb3", "cio"] },
+    videoUrl: null, deckSlideCount: 14, date: "2025-10",
+  },
+  {
+    id: "st-4", customer: "Arizona State University", industry: "education",
+    summary: "Deployed AI-first collaboration across 80,000-student campus for hybrid learning at scale.",
+    problem: "ASU's rapid expansion to 80,000+ students across five campuses strained its collaboration infrastructure. Faculty used inconsistent video tools, lecture recordings lacked searchability, and international students (22% of enrollment) faced language barriers in virtual office hours and group projects.",
+    solution: "Cisco deployed Webex as the unified collaboration platform with AI Assistant providing real-time transcription, translation in 100+ languages, and intelligent meeting summaries. Smart classrooms with Cisco Room Bar systems enabled hybrid lectures with automatic camera framing. Webex AI Agent handled routine student service inquiries for admissions and financial aid.",
+    outcome: "Student satisfaction with hybrid learning jumped from 61% to 89%. International student engagement in virtual sessions increased 45%. The AI Agent resolved 60% of routine inquiries without human intervention, freeing 8 full-time-equivalent staff positions for higher-value advising.",
+    metrics: [{ value: "89%", label: "Student satisfaction" }, { value: "45%", label: "Engagement lift" }, { value: "60%", label: "AI self-service" }],
+    tags: { products: ["collaboration"], initiatives: ["c1", "c2", "c3"], verticals: ["education"], buyerRoles: ["cb1", "cb2", "cb3"] },
+    videoUrl: null, deckSlideCount: 11, date: "2025-08",
+  },
+  {
+    id: "st-5", customer: "City of Atlanta", industry: "government",
+    summary: "Secured citywide network infrastructure with AI-powered operations and zero-trust architecture.",
+    problem: "Atlanta's network spanned 150+ municipal buildings with aging infrastructure and inconsistent security policies. After a ransomware incident disrupted city services for five days, leadership mandated a complete network security overhaul. The IT team lacked visibility into lateral movement threats and had no automated incident response.",
+    solution: "Cisco deployed AgenticOps across the city's network fabric with AI Canvas providing cross-domain threat correlation. Post-quantum cryptography was enabled on all WAN links between facilities. ThousandEyes monitored citizen-facing application performance end-to-end, while Workflows Engine automated threat containment and compliance reporting.",
+    outcome: "The city achieved zero successful lateral movement incidents in the first year. Mean time to detect threats dropped from 72 hours to under 15 minutes. Automated compliance reporting saved 2,000 staff hours annually, and citizen digital service uptime reached 99.95%.",
+    metrics: [{ value: "0", label: "Lateral breaches" }, { value: "<15min", label: "Detection time" }, { value: "99.95%", label: "Service uptime" }],
+    tags: { products: ["networking"], initiatives: ["n2", "n3"], verticals: ["government"], buyerRoles: ["ciso", "nb2", "vpSecurity"] },
+    videoUrl: null, deckSlideCount: 13, date: "2025-12",
+  },
+  {
+    id: "st-6", customer: "VA Medical Center Network", industry: "government",
+    summary: "Integrated secure networking and telehealth collaboration across 170 VA medical facilities.",
+    problem: "The VA's 170 medical facilities operated siloed networking and collaboration systems that couldn't support the surge in veteran telehealth demand. Network security policies varied by region, video quality for remote consultations was unreliable, and clinicians wasted time switching between platforms for different care scenarios.",
+    solution: "Cisco delivered a converged networking and collaboration solution: unified Meraki + Catalyst networking with embedded security for all facilities, plus Webex-powered telehealth with HIPAA-compliant recording and AI-assisted clinical documentation. Smart rooms in specialty clinics enabled remote specialist consultations with diagnostic-quality video.",
+    outcome: "Veteran telehealth appointments increased 120% with 96% satisfaction scores. Network security incidents dropped 70% through unified zero-trust policies. Specialist wait times decreased from 45 days to 12 days through remote consultation capabilities, serving an additional 50,000 veterans annually.",
+    metrics: [{ value: "120%", label: "Telehealth growth" }, { value: "70%", label: "Fewer incidents" }, { value: "50K+", label: "More vets served" }],
+    tags: { products: ["networking", "collaboration"], initiatives: ["n1", "n3", "c1"], verticals: ["government"], buyerRoles: ["cio", "vpIt", "cb1"] },
+    videoUrl: null, deckSlideCount: 16, date: "2025-07",
+  },
+  {
+    id: "st-7", customer: "BMW Manufacturing", industry: "manufacturing",
+    summary: "Connected 12 smart factory floors with unified industrial networking and AI-driven operations.",
+    problem: "BMW's manufacturing network across 12 production facilities ran separate OT and IT networks with no unified visibility. Unplanned downtime cost $22,000 per minute on the assembly line. Network troubleshooting required physical site visits, and the convergence of IT/OT created security blind spots exploitable by supply-chain attacks.",
+    solution: "Cisco unified IT/OT networking under a single Catalyst fabric with industrial-grade switches and Meraki Dashboard for cloud management. AI Canvas provided predictive failure detection across the converged network. Embedded microsegmentation isolated OT devices from IT traffic while maintaining operational visibility.",
+    outcome: "Unplanned network-related downtime dropped 75%, saving an estimated $18M annually. Network troubleshooting shifted from on-site visits to remote AI-assisted resolution for 90% of incidents. The unified IT/OT security posture passed BMW's internal penetration testing with zero critical findings.",
+    metrics: [{ value: "75%", label: "Less downtime" }, { value: "$18M", label: "Annual savings" }, { value: "90%", label: "Remote resolution" }],
+    tags: { products: ["networking"], initiatives: ["n1", "n2"], verticals: ["manufacturing"], buyerRoles: ["cio", "nb1", "nb2"] },
+    videoUrl: null, deckSlideCount: 12, date: "2025-06",
+  },
+  {
+    id: "st-8", customer: "Siemens Smart Factory", industry: "manufacturing",
+    summary: "Deployed intelligent workspaces and AI collaboration for globally distributed engineering teams.",
+    problem: "Siemens' engineering teams across 15 countries struggled with collaboration on complex product designs. Time-zone differences and language barriers slowed design review cycles from days to weeks. Physical prototype reviews required expensive international travel, and meeting rooms were poorly equipped for hybrid design sessions.",
+    solution: "Cisco deployed smart collaboration rooms with Cisco Board Pro systems for interactive 3D design reviews across locations. AI Assistant provided real-time translation for multilingual engineering reviews and automated action-item tracking. Webex integrated with Siemens' PLM tools for contextual collaboration directly within design workflows.",
+    outcome: "Design review cycle time compressed from 18 days to 5 days. International travel for design reviews decreased 60%, saving $4.2M annually. Engineering productivity improved 25% through reduced context-switching and AI-assisted documentation.",
+    metrics: [{ value: "72%", label: "Faster reviews" }, { value: "$4.2M", label: "Travel savings" }, { value: "25%", label: "Productivity gain" }],
+    tags: { products: ["collaboration"], initiatives: ["c1", "c2"], verticals: ["manufacturing"], buyerRoles: ["cb1", "cb2", "vpWorkplace"] },
+    videoUrl: null, deckSlideCount: 10, date: "2025-10",
+  },
+  {
+    id: "st-9", customer: "Nordstrom", industry: "retail",
+    summary: "Modernized 350 store networks with Wi-Fi 7 for seamless omnichannel retail experiences.",
+    problem: "Nordstrom's in-store technology initiatives — mobile POS, clienteling apps, inventory RFID — were constrained by aging Wi-Fi infrastructure across 350 locations. Peak shopping periods saw 40% packet loss on associate devices. Each store network was managed independently, creating a patchwork of configurations and security policies.",
+    solution: "Cisco deployed Wi-Fi 7 access points across all stores with Meraki cloud management for centralized policy and monitoring. Cisco Spaces provided real-time customer journey analytics and heat mapping. The unified networking subscription consolidated per-store licensing into a single enterprise agreement with portable licenses.",
+    outcome: "Associate device reliability improved to 99.8% during peak periods. Clienteling app adoption doubled as associates trusted the network. Real-time customer analytics drove a 12% increase in cross-sell conversion, and network operational costs decreased 35% through centralized management.",
+    metrics: [{ value: "99.8%", label: "Device reliability" }, { value: "12%", label: "Cross-sell lift" }, { value: "35%", label: "OpEx reduction" }],
+    tags: { products: ["networking"], initiatives: ["n1", "n3"], verticals: ["retail"], buyerRoles: ["nb3", "vpIt", "cio"] },
+    videoUrl: null, deckSlideCount: 11, date: "2025-11",
+  },
+  {
+    id: "st-10", customer: "Sephora", industry: "retail",
+    summary: "Transformed customer experience with AI-powered contact center and omnichannel engagement.",
+    problem: "Sephora's contact center handled 2M+ monthly interactions across chat, voice, and social channels with average handle times of 8 minutes. Customers frequently repeated information across channels, beauty advisors lacked real-time product knowledge during calls, and peak-season staffing required 200+ temporary agents with 3-week training cycles.",
+    solution: "Cisco deployed Webex Contact Center with AI Agent handling routine inquiries — order status, product recommendations, and appointment booking — in 30+ languages. Agent Assist provided real-time product knowledge and purchase history during live interactions. Quality Management AI automatically scored interactions and identified coaching opportunities.",
+    outcome: "AI Agent resolved 55% of routine inquiries autonomously, reducing live agent volume by 40%. Average handle time dropped to 4.5 minutes. Customer satisfaction increased from 78% to 91%, and seasonal agent onboarding compressed from 3 weeks to 4 days through AI-assisted training.",
+    metrics: [{ value: "55%", label: "AI self-service" }, { value: "91%", label: "CSAT score" }, { value: "40%", label: "Volume reduction" }],
+    tags: { products: ["collaboration"], initiatives: ["c3"], verticals: ["retail"], buyerRoles: ["cb3", "cio"] },
+    videoUrl: null, deckSlideCount: 13, date: "2025-09",
+  },
+  {
+    id: "st-11", customer: "JPMorgan Chase", industry: "financial",
+    summary: "Secured global trading floor network with post-quantum cryptography and AI-driven operations.",
+    problem: "JPMorgan's trading floor network across 60 global locations demanded sub-millisecond latency and zero tolerance for outages. Growing regulatory requirements for data sovereignty and quantum-readiness created compliance pressure. The network team managed 500,000+ endpoints with legacy monitoring tools that generated 10,000+ daily alerts, most false positives.",
+    solution: "Cisco deployed a unified Meraki + Catalyst fabric with post-quantum cryptographic protocols on all inter-site links. AI Canvas correlated alerts across network, security, and application domains to reduce noise by 95%. ThousandEyes provided transaction-path visibility for latency-sensitive trading applications. Microsegmentation isolated trading systems from corporate networks.",
+    outcome: "Alert noise dropped 95%, from 10,000 daily to under 500 actionable items. Network-related trading outages went to zero for 14 consecutive months. The bank achieved quantum-readiness certification ahead of schedule, and annual network operations costs decreased $12M through automation.",
+    metrics: [{ value: "95%", label: "Alert reduction" }, { value: "0", label: "Trading outages" }, { value: "$12M", label: "OpEx savings" }],
+    tags: { products: ["networking"], initiatives: ["n1", "n2", "n3"], verticals: ["financial"], buyerRoles: ["ciso", "nb1", "nb2", "cio"] },
+    videoUrl: null, deckSlideCount: 15, date: "2025-12",
+  },
+  {
+    id: "st-12", customer: "Umpqua Bank", industry: "financial",
+    summary: "Reimagined branch experience with AI-powered video banking and smart collaboration spaces.",
+    problem: "Umpqua's 200+ branches were transitioning to a hybrid advisory model, but legacy video systems couldn't support reliable customer consultations with remote specialists. Branch advisors lacked tools for secure document sharing during sessions, and the contact center struggled to route complex financial inquiries to the right specialist.",
+    solution: "Cisco deployed Webex-powered video banking kiosks in branches with end-to-end encryption and secure document collaboration. AI-powered routing in Webex Contact Center matched customer inquiries to specialist expertise in real time. Smart meeting rooms in flagship branches used Cisco Room systems for high-value client presentations.",
+    outcome: "Remote specialist consultations increased 180%, enabling Umpqua to serve complex financial needs in branches without dedicated specialists. Customer Net Promoter Score improved 22 points. Branch operating costs decreased 20% by optimizing specialist coverage across the network.",
+    metrics: [{ value: "180%", label: "More consultations" }, { value: "+22 pts", label: "NPS improvement" }, { value: "20%", label: "Cost reduction" }],
+    tags: { products: ["collaboration"], initiatives: ["c1", "c3"], verticals: ["financial"], buyerRoles: ["cb1", "cb3", "vpWorkplace"] },
+    videoUrl: null, deckSlideCount: 10, date: "2025-08",
+  },
+];
+
 // ─── SLIDE DATA (auto-generated from messaging hierarchy) ─────────────────────
 function generateMockSlides() {
   const out = [];
@@ -2189,6 +2329,335 @@ const navItems = [
   { id: "competitive", label: "Competitive", icon: NavIconCompetitive },
 ];
 
+// ─── STORIES PAGE ─────────────────────────────────────────────────────────────
+
+function TagPill({ label, isActive, onClick, small }) {
+  return (
+    <span
+      onClick={onClick}
+      style={{
+        display: "inline-block", fontSize: small ? 10 : 11, padding: small ? "2px 8px" : "4px 12px",
+        border: `1px solid ${isActive ? C.text : C.border}`, borderRadius: 100,
+        background: isActive ? C.text : "transparent", color: isActive ? C.bg : C.textSecondary,
+        cursor: onClick ? "pointer" : "default", transition: "all 0.15s ease",
+        whiteSpace: "nowrap", fontWeight: 400,
+      }}
+    >
+      {label}
+    </span>
+  );
+}
+
+function StoryCard({ story, onClick }) {
+  const prodLabels = story.tags.products.map(p => tagsDef.products[p]);
+  const industryLabel = tagsDef.verticals[story.industry] || story.industry;
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        border: `1px solid ${C.border}`, borderRadius: 2, background: C.bg, cursor: "pointer",
+        padding: 20, transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: 12,
+      }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = C.textTertiary; e.currentTarget.style.background = C.accentSoft; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.background = C.bg; }}
+    >
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+        <TagPill label={industryLabel} small />
+        {prodLabels.map(p => <TagPill key={p} label={p} small />)}
+      </div>
+      <div>
+        <div style={{ fontSize: 17, fontWeight: 400, color: C.text, marginBottom: 4 }}>{story.customer}</div>
+        <div style={{ fontSize: 13, color: C.textSecondary, fontWeight: 300, lineHeight: 1.6 }}>{story.summary}</div>
+      </div>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: "auto" }}>
+        {story.metrics.map((m, i) => (
+          <div key={i} style={{ fontSize: 12, color: C.textTertiary }}>
+            <span style={{ fontWeight: 600, color: C.text, marginRight: 4 }}>{m.value}</span>{m.label}
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 12, fontSize: 11, color: C.textTertiary }}>
+        {story.videoUrl !== null && <span>▶ Video</span>}
+        {story.deckSlideCount > 0 && <span>◻ {story.deckSlideCount} slides</span>}
+        <span style={{ marginLeft: "auto" }}>{story.date}</span>
+      </div>
+    </div>
+  );
+}
+
+function StoryDetail({ story, onBack }) {
+  const sectionLabel = { fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 };
+  const bodyText = { fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 };
+  const industryLabel = tagsDef.verticals[story.industry] || story.industry;
+  const prodLabels = story.tags.products.map(p => tagsDef.products[p]);
+  const initLabels = story.tags.initiatives.map(i => tagsDef.initiatives[i]).filter(Boolean);
+  const roleLabels = story.tags.buyerRoles.map(r => tagsDef.buyerRoles[r]).filter(Boolean);
+
+  return (
+    <div style={{ padding: "24px 32px", maxWidth: 800 }}>
+      {/* Back button */}
+      <div
+        onClick={onBack}
+        style={{ fontSize: 12, color: C.textTertiary, cursor: "pointer", marginBottom: 24, display: "inline-flex", alignItems: "center", gap: 6 }}
+        onMouseEnter={e => e.currentTarget.style.color = C.text}
+        onMouseLeave={e => e.currentTarget.style.color = C.textTertiary}
+      >
+        ← All Stories
+      </div>
+
+      {/* Header */}
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+          <TagPill label={industryLabel} />
+          {prodLabels.map(p => <TagPill key={p} label={p} />)}
+        </div>
+        <h1 style={{ fontSize: 28, fontWeight: 300, color: C.text, margin: 0, marginBottom: 8 }}>{story.customer}</h1>
+        <p style={{ fontSize: 15, color: C.textSecondary, fontWeight: 300, lineHeight: 1.6, margin: 0 }}>{story.summary}</p>
+      </div>
+
+      {/* Metrics */}
+      <div style={{ display: "flex", gap: 24, marginBottom: 40, padding: "20px 0", borderTop: `1px solid ${C.borderLight}`, borderBottom: `1px solid ${C.borderLight}` }}>
+        {story.metrics.map((m, i) => (
+          <div key={i} style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 24, fontWeight: 300, color: C.text }}>{m.value}</div>
+            <div style={{ fontSize: 11, color: C.textTertiary, marginTop: 4 }}>{m.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Problem */}
+      <div style={{ marginBottom: 32 }}>
+        <p style={sectionLabel}>Problem</p>
+        <p style={bodyText}>{story.problem}</p>
+      </div>
+
+      {/* Solution */}
+      <div style={{ marginBottom: 32 }}>
+        <p style={sectionLabel}>Solution</p>
+        <p style={bodyText}>{story.solution}</p>
+      </div>
+
+      {/* Outcome */}
+      <div style={{ marginBottom: 40 }}>
+        <p style={sectionLabel}>Outcome</p>
+        <p style={bodyText}>{story.outcome}</p>
+      </div>
+
+      {/* Video placeholder */}
+      <div style={{ marginBottom: 40 }}>
+        <p style={sectionLabel}>Video</p>
+        <div style={{
+          aspectRatio: "16/9", maxWidth: 560, background: C.accentSoft, borderRadius: 2,
+          border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <div style={{ width: 48, height: 48, borderRadius: "50%", border: `2px solid ${C.textTertiary}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width={18} height={18} viewBox="0 0 24 24" fill={C.textTertiary}><polygon points="8,5 20,12 8,19" /></svg>
+          </div>
+        </div>
+        <div style={{ fontSize: 11, color: C.textTertiary, marginTop: 8 }}>Video coming soon</div>
+      </div>
+
+      {/* Deck preview placeholder */}
+      <div style={{ marginBottom: 40 }}>
+        <p style={sectionLabel}>Related Deck ({story.deckSlideCount} slides)</p>
+        <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8 }}>
+          {Array.from({ length: Math.min(story.deckSlideCount, 6) }).map((_, i) => (
+            <div key={i} style={{
+              width: 160, minWidth: 160, aspectRatio: "16/9", background: C.accentSoft,
+              border: `1px solid ${C.border}`, borderRadius: 2, display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 10, color: C.textTertiary,
+            }}>
+              Slide {i + 1}
+            </div>
+          ))}
+          {story.deckSlideCount > 6 && (
+            <div style={{
+              width: 160, minWidth: 160, aspectRatio: "16/9", background: "transparent",
+              border: `1px dashed ${C.border}`, borderRadius: 2, display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 11, color: C.textTertiary,
+            }}>
+              +{story.deckSlideCount - 6} more
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Tags */}
+      <div style={{ borderTop: `1px solid ${C.borderLight}`, paddingTop: 24 }}>
+        <p style={sectionLabel}>Tags</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+            <span style={{ fontSize: 10, color: C.textTertiary, width: 70, flexShrink: 0 }}>Products</span>
+            {prodLabels.map(p => <TagPill key={p} label={p} small />)}
+          </div>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+            <span style={{ fontSize: 10, color: C.textTertiary, width: 70, flexShrink: 0 }}>Initiatives</span>
+            {initLabels.map(l => <TagPill key={l} label={l} small />)}
+          </div>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+            <span style={{ fontSize: 10, color: C.textTertiary, width: 70, flexShrink: 0 }}>Buyers</span>
+            {roleLabels.map(l => <TagPill key={l} label={l} small />)}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StoriesPage() {
+  const [filters, setFilters] = useState({ vertical: "all", products: [], initiatives: [], buyerRoles: [] });
+  const [sortBy, setSortBy] = useState("date");
+  const [selectedStory, setSelectedStory] = useState(null);
+  const [expandBuyers, setExpandBuyers] = useState(false);
+
+  const updateFilter = (key, val) => setFilters(f => {
+    const arr = f[key];
+    return { ...f, [key]: arr.includes(val) ? arr.filter(x => x !== val) : [...arr, val] };
+  });
+
+  const clearFilters = () => setFilters({ vertical: "all", products: [], initiatives: [], buyerRoles: [] });
+
+  const hasFilters = filters.vertical !== "all" || filters.products.length || filters.initiatives.length || filters.buyerRoles.length;
+
+  const filtered = stories.filter(s => {
+    if (filters.vertical !== "all" && s.industry !== filters.vertical) return false;
+    if (filters.products.length && !filters.products.some(p => s.tags.products.includes(p))) return false;
+    if (filters.initiatives.length && !filters.initiatives.some(i => s.tags.initiatives.includes(i))) return false;
+    if (filters.buyerRoles.length && !filters.buyerRoles.some(b => s.tags.buyerRoles.includes(b))) return false;
+    return true;
+  });
+
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortBy === "date") return b.date.localeCompare(a.date);
+    if (sortBy === "industry") return a.industry.localeCompare(b.industry);
+    if (sortBy === "product") return (a.tags.products[0] || "").localeCompare(b.tags.products[0] || "");
+    return 0;
+  });
+
+  const selectStyle = {
+    fontSize: 13, padding: "8px 28px 8px 12px", border: `1px solid ${C.border}`, borderRadius: 2,
+    background: C.bg, color: C.text, appearance: "none", width: "100%", cursor: "pointer", outline: "none",
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' fill='none' stroke-width='1.2'/%3E%3C/svg%3E")`,
+    backgroundRepeat: "no-repeat", backgroundPosition: "right 10px center",
+  };
+
+  const sectionHead = { fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 };
+
+  const networkingInits = ["n1", "n2", "n3"];
+  const collabInits = ["c1", "c2", "c3"];
+
+  return (
+    <div style={{ display: "flex", height: "100%", overflow: "hidden" }}>
+      {/* ── LEFT PANEL: Filters ── */}
+      <div style={{ width: 260, minWidth: 260, borderRight: `1px solid ${C.border}`, overflowY: "auto", padding: "20px 16px" }}>
+        <h2 style={{ fontSize: 18, fontWeight: 400, color: C.text, margin: "0 0 20px" }}>Stories</h2>
+
+        {/* Vertical dropdown */}
+        <div style={{ marginBottom: 20 }}>
+          <p style={sectionHead}>Vertical</p>
+          <select value={filters.vertical} onChange={e => setFilters(f => ({ ...f, vertical: e.target.value }))} style={selectStyle}>
+            <option value="all">All Verticals</option>
+            {Object.entries(tagsDef.verticals).filter(([k]) => k !== "general").map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Product pills */}
+        <div style={{ marginBottom: 20 }}>
+          <p style={sectionHead}>Product</p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {Object.entries(tagsDef.products).map(([k, v]) => (
+              <TagPill key={k} label={v} isActive={filters.products.includes(k)} onClick={() => updateFilter("products", k)} small />
+            ))}
+          </div>
+        </div>
+
+        {/* Initiative checkboxes */}
+        <div style={{ marginBottom: 20 }}>
+          <p style={sectionHead}>Initiatives</p>
+          <div style={{ fontSize: 9, letterSpacing: 1, color: C.textTertiary, textTransform: "uppercase", marginBottom: 6 }}>Networking</div>
+          {networkingInits.map(k => (
+            <label key={k} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: C.textSecondary, padding: "3px 0", cursor: "pointer" }}>
+              <input type="checkbox" checked={filters.initiatives.includes(k)} onChange={() => updateFilter("initiatives", k)}
+                style={{ accentColor: C.text, width: 13, height: 13 }} />
+              {tagsDef.initiatives[k]}
+            </label>
+          ))}
+          <div style={{ fontSize: 9, letterSpacing: 1, color: C.textTertiary, textTransform: "uppercase", marginTop: 10, marginBottom: 6 }}>Collaboration</div>
+          {collabInits.map(k => (
+            <label key={k} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: C.textSecondary, padding: "3px 0", cursor: "pointer" }}>
+              <input type="checkbox" checked={filters.initiatives.includes(k)} onChange={() => updateFilter("initiatives", k)}
+                style={{ accentColor: C.text, width: 13, height: 13 }} />
+              {tagsDef.initiatives[k]}
+            </label>
+          ))}
+        </div>
+
+        {/* Buyer roles */}
+        <div style={{ marginBottom: 20 }}>
+          <p style={{ ...sectionHead, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }} onClick={() => setExpandBuyers(v => !v)}>
+            Buyer Roles <span style={{ fontSize: 8 }}>{expandBuyers ? "▲" : "▼"}</span>
+          </p>
+          {expandBuyers && Object.entries(tagsDef.buyerRoles).map(([k, v]) => (
+            <label key={k} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: C.textSecondary, padding: "3px 0", cursor: "pointer" }}>
+              <input type="checkbox" checked={filters.buyerRoles.includes(k)} onChange={() => updateFilter("buyerRoles", k)}
+                style={{ accentColor: C.text, width: 13, height: 13 }} />
+              {v}
+            </label>
+          ))}
+        </div>
+
+        {/* Sort */}
+        <div style={{ marginBottom: 20 }}>
+          <p style={sectionHead}>Sort By</p>
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={selectStyle}>
+            <option value="date">Most Recent</option>
+            <option value="industry">Industry</option>
+            <option value="product">Product</option>
+          </select>
+        </div>
+
+        {/* Active filters */}
+        {hasFilters && (
+          <div style={{ borderTop: `1px solid ${C.borderLight}`, paddingTop: 12 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <span style={{ fontSize: 10, color: C.textTertiary, letterSpacing: 1, textTransform: "uppercase" }}>Active Filters</span>
+              <span onClick={clearFilters} style={{ fontSize: 11, color: C.textTertiary, cursor: "pointer", textDecoration: "underline" }}>Clear all</span>
+            </div>
+            <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+              {filters.vertical !== "all" && <TagPill label={tagsDef.verticals[filters.vertical]} isActive onClick={() => setFilters(f => ({ ...f, vertical: "all" }))} small />}
+              {filters.products.map(p => <TagPill key={p} label={tagsDef.products[p]} isActive onClick={() => updateFilter("products", p)} small />)}
+              {filters.initiatives.map(i => <TagPill key={i} label={tagsDef.initiatives[i]} isActive onClick={() => updateFilter("initiatives", i)} small />)}
+              {filters.buyerRoles.map(b => <TagPill key={b} label={tagsDef.buyerRoles[b]} isActive onClick={() => updateFilter("buyerRoles", b)} small />)}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── RIGHT PANEL ── */}
+      <div style={{ flex: 1, overflowY: "auto" }}>
+        {selectedStory ? (
+          <StoryDetail story={selectedStory} onBack={() => setSelectedStory(null)} />
+        ) : (
+          <div style={{ padding: "24px 32px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+              <span style={{ fontSize: 13, color: C.textTertiary }}>{sorted.length} stor{sorted.length === 1 ? "y" : "ies"}</span>
+            </div>
+            {sorted.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "80px 0", color: C.textTertiary, fontSize: 13 }}>No stories match the current filters.</div>
+            ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
+                {sorted.map(s => <StoryCard key={s.id} story={s} onClick={() => setSelectedStory(s)} />)}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── APP ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -2201,7 +2670,7 @@ export default function App() {
       case "messaging": return <MessagingPage />;
       case "buyers": return <BuyersPage />;
       case "pitch": return <Placeholder title="Pitch" description="Pitch frameworks and talk tracks — coming soon." />;
-      case "stories": return <Placeholder title="Customer Stories" description="Reference accounts and success narratives — coming soon." />;
+      case "stories": return <StoriesPage />;
       case "deck": return <DeckBuilderPage />;
       case "exec": return <Placeholder title="Exec Thought Leadership" description="Executive positioning and keynote themes — coming soon." />;
       case "competitive": return <Placeholder title="Competitive" description="Competitive positioning and battlecards — coming soon." />;
