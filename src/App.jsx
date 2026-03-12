@@ -1318,6 +1318,189 @@ function BuyersPage() {
 
 const TYPE_LABELS = { company: "Company", solution: "Solution", product: "Product", initiative: "Initiative", useCase: "Use Case" };
 
+// ── Slide visual templates (SVG-based, render at any scale) ──
+function SlidePreview({ slide, width = 320, height = 180 }) {
+  const seed = slide.id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  const hue = (seed * 37) % 360;
+  const accent = `hsl(${hue}, 8%, 72%)`;
+  const accentSoft = `hsl(${hue}, 6%, 94%)`;
+  const darkAccent = `hsl(${hue}, 8%, 28%)`;
+  const isDark = C.bg !== "#ffffff";
+  const bg = isDark ? "#1a1a1a" : "#ffffff";
+  const fg = isDark ? "#e5e5e5" : "#171717";
+  const fgSoft = isDark ? "#737373" : "#a3a3a3";
+  const fgMid = isDark ? "#a3a3a3" : "#737373";
+  const border = isDark ? "#333" : "#e5e5e5";
+  const surface = isDark ? "#222" : "#f5f5f5";
+  const ciscoBridge = "M8.5 2.5C6 5 4.5 6.5 3 9.5c1.5-1.5 3-2.5 5.5-2.5s4 1 5.5 2.5C12.5 6.5 11 5 8.5 2.5z";
+
+  const s = (v) => v * width / 320; // scale helper
+
+  if (slide.type === "company") {
+    return (
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+        <rect width={width} height={height} fill={bg} />
+        {/* Large accent band at top */}
+        <rect x={0} y={0} width={width} height={s(6)} fill={isDark ? darkAccent : accent} />
+        {/* Decorative geometric shapes */}
+        <rect x={s(200)} y={s(30)} width={s(90)} height={s(90)} rx={s(2)} fill={surface} />
+        <rect x={s(210)} y={s(40)} width={s(70)} height={s(70)} rx={s(45)} fill="none" stroke={border} strokeWidth={s(1)} />
+        <circle cx={s(245)} cy={s(75)} r={s(20)} fill="none" stroke={accent} strokeWidth={s(1.5)} />
+        {/* Cisco bridge icon */}
+        <g transform={`translate(${s(235)}, ${s(65)}) scale(${s(1.2)})`}>
+          <path d={ciscoBridge} fill={accent} />
+        </g>
+        {/* Title text */}
+        <text x={s(24)} y={s(55)} fontSize={s(18)} fontWeight="300" fill={fg} fontFamily="sans-serif">{slide.title}</text>
+        {/* Subtitle */}
+        <text x={s(24)} y={s(78)} fontSize={s(9)} fill={fgMid} fontFamily="sans-serif">{slide.subtitle.slice(0, 50)}</text>
+        {/* Bottom bar with type label */}
+        <rect x={0} y={height - s(24)} width={width} height={s(24)} fill={surface} />
+        <text x={s(24)} y={height - s(9)} fontSize={s(7)} fill={fgSoft} fontFamily="sans-serif" letterSpacing={s(1.5)} textTransform="uppercase">COMPANY OVERVIEW</text>
+        {/* Cisco logo bottom right */}
+        <g transform={`translate(${width - s(48)}, ${height - s(18)}) scale(${s(0.6)})`}>
+          <path d={ciscoBridge} fill={fgSoft} />
+        </g>
+      </svg>
+    );
+  }
+
+  if (slide.type === "solution") {
+    return (
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+        <rect width={width} height={height} fill={bg} />
+        {/* Left accent stripe */}
+        <rect x={0} y={0} width={s(4)} height={height} fill={isDark ? darkAccent : accent} />
+        {/* Section label */}
+        <text x={s(20)} y={s(22)} fontSize={s(7)} fill={fgSoft} fontFamily="sans-serif" letterSpacing={s(1.5)}>SOLUTION CATEGORY</text>
+        {/* Title */}
+        <text x={s(20)} y={s(48)} fontSize={s(14)} fontWeight="300" fill={fg} fontFamily="sans-serif">{slide.title.slice(0, 35)}</text>
+        {/* Subtitle */}
+        <text x={s(20)} y={s(66)} fontSize={s(8)} fill={fgMid} fontFamily="sans-serif">{slide.subtitle.slice(0, 55)}</text>
+        {/* Three pillar boxes */}
+        {[0, 1, 2].map(i => (
+          <g key={i}>
+            <rect x={s(20 + i * 95)} y={s(85)} width={s(85)} height={s(45)} rx={s(2)} fill={surface} stroke={border} strokeWidth={s(0.5)} />
+            <rect x={s(20 + i * 95)} y={s(85)} width={s(85)} height={s(3)} rx={s(1)} fill={accent} />
+            <line x1={s(32 + i * 95)} y1={s(100)} x2={s(80 + i * 95)} y2={s(100)} stroke={border} strokeWidth={s(1)} />
+            <line x1={s(32 + i * 95)} y1={s(110)} x2={s(70 + i * 95)} y2={s(110)} stroke={border} strokeWidth={s(1)} />
+            <line x1={s(32 + i * 95)} y1={s(120)} x2={s(60 + i * 95)} y2={s(120)} stroke={border} strokeWidth={s(1)} />
+          </g>
+        ))}
+        {/* Bottom */}
+        <rect x={0} y={height - s(24)} width={width} height={s(24)} fill={surface} />
+        <g transform={`translate(${width - s(48)}, ${height - s(18)}) scale(${s(0.6)})`}><path d={ciscoBridge} fill={fgSoft} /></g>
+      </svg>
+    );
+  }
+
+  if (slide.type === "product") {
+    const isNet = slide.productId === "networking";
+    return (
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+        <rect width={width} height={height} fill={bg} />
+        {/* Top band */}
+        <rect x={0} y={0} width={width} height={s(3)} fill={isDark ? darkAccent : accent} />
+        {/* Product icon area */}
+        <rect x={s(20)} y={s(18)} width={s(36)} height={s(36)} rx={s(18)} fill={surface} stroke={border} strokeWidth={s(0.5)} />
+        {isNet ? (
+          <g transform={`translate(${s(30)}, ${s(28)}) scale(${s(0.65)})`}>
+            <rect x="2" y="6" width="20" height="12" rx="1" fill="none" stroke={fgMid} strokeWidth="1.5" />
+            <line x1="6" y1="10" x2="6" y2="14" stroke={fgMid} strokeWidth="1.5" />
+            <line x1="12" y1="10" x2="12" y2="14" stroke={fgMid} strokeWidth="1.5" />
+            <line x1="18" y1="10" x2="18" y2="14" stroke={fgMid} strokeWidth="1.5" />
+          </g>
+        ) : (
+          <g transform={`translate(${s(30)}, ${s(28)}) scale(${s(0.65)})`}>
+            <circle cx="12" cy="12" r="10" fill="none" stroke={fgMid} strokeWidth="1.5" />
+            <path d="M8 12a4 4 0 0 1 8 0" fill="none" stroke={fgMid} strokeWidth="1.5" />
+          </g>
+        )}
+        {/* Title */}
+        <text x={s(66)} y={s(34)} fontSize={s(13)} fontWeight="400" fill={fg} fontFamily="sans-serif">{slide.title}</text>
+        <text x={s(66)} y={s(48)} fontSize={s(7.5)} fill={fgMid} fontFamily="sans-serif">{slide.subtitle.slice(0, 45)}</text>
+        {/* Stats row */}
+        {[0, 1, 2].map(i => (
+          <g key={i}>
+            <rect x={s(20 + i * 95)} y={s(68)} width={s(85)} height={s(55)} rx={s(2)} fill={surface} />
+            <rect x={s(38 + i * 95)} y={s(80)} width={s(50)} height={s(4)} rx={s(2)} fill={border} />
+            <rect x={s(38 + i * 95)} y={s(90)} width={s(35)} height={s(3)} rx={s(1.5)} fill={border} />
+            <circle cx={s(30 + i * 95)} cy={s(87)} r={s(4)} fill={accent} opacity={0.5} />
+            <rect x={s(28 + i * 95)} y={s(102)} width={s(65)} height={s(3)} rx={s(1.5)} fill={border} opacity={0.5} />
+            <rect x={s(28 + i * 95)} y={s(109)} width={s(45)} height={s(3)} rx={s(1.5)} fill={border} opacity={0.5} />
+          </g>
+        ))}
+        {/* Bottom */}
+        <rect x={0} y={height - s(22)} width={width} height={s(22)} fill={surface} />
+        <text x={s(20)} y={height - s(8)} fontSize={s(6.5)} fill={fgSoft} fontFamily="sans-serif" letterSpacing={s(1)}>PRODUCT OVERVIEW</text>
+        <g transform={`translate(${width - s(48)}, ${height - s(16)}) scale(${s(0.6)})`}><path d={ciscoBridge} fill={fgSoft} /></g>
+      </svg>
+    );
+  }
+
+  if (slide.type === "initiative") {
+    const barCount = 4;
+    const barHeights = Array.from({ length: barCount }, (_, i) => s(15 + ((seed * (i + 3) * 7) % 35)));
+    return (
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+        <rect width={width} height={height} fill={bg} />
+        {/* Top colored band */}
+        <rect x={0} y={0} width={s(120)} height={s(3)} fill={isDark ? darkAccent : accent} />
+        {/* Section label */}
+        <text x={s(20)} y={s(20)} fontSize={s(6.5)} fill={fgSoft} fontFamily="sans-serif" letterSpacing={s(1.5)}>INITIATIVE</text>
+        {/* Title */}
+        <text x={s(20)} y={s(38)} fontSize={s(11)} fontWeight="500" fill={fg} fontFamily="sans-serif">{slide.title.slice(0, 40)}</text>
+        <text x={s(20)} y={s(52)} fontSize={s(7.5)} fill={fgMid} fontFamily="sans-serif">{slide.subtitle.slice(0, 50)}</text>
+        {/* Content area: left = text lines, right = mini bar chart */}
+        {[0, 1, 2, 3, 4].map(i => (
+          <g key={i}>
+            <circle cx={s(28)} cy={s(72 + i * 14)} r={s(2)} fill={accent} />
+            <rect x={s(36)} y={s(70 + i * 14)} width={s(80 + (seed * (i + 1)) % 40)} height={s(3)} rx={s(1.5)} fill={border} />
+          </g>
+        ))}
+        {/* Mini bar chart right side */}
+        {barHeights.map((h, i) => (
+          <rect key={i} x={s(210 + i * 22)} y={s(135) - h} width={s(16)} height={h} rx={s(1)} fill={i === barCount - 1 ? accent : surface} stroke={border} strokeWidth={s(0.5)} />
+        ))}
+        <line x1={s(206)} y1={s(136)} x2={s(300)} y2={s(136)} stroke={border} strokeWidth={s(0.5)} />
+        {/* Bottom */}
+        <rect x={0} y={height - s(20)} width={width} height={s(20)} fill={surface} />
+        <g transform={`translate(${width - s(44)}, ${height - s(15)}) scale(${s(0.55)})`}><path d={ciscoBridge} fill={fgSoft} /></g>
+      </svg>
+    );
+  }
+
+  // useCase — detail slide
+  const lineWidths = Array.from({ length: 6 }, (_, i) => s(60 + ((seed * (i + 2) * 11) % 80)));
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+      <rect width={width} height={height} fill={bg} />
+      {/* Accent corner */}
+      <polygon points={`0,0 ${s(50)},0 0,${s(50)}`} fill={accentSoft} />
+      <rect x={0} y={0} width={s(3)} height={s(50)} fill={isDark ? darkAccent : accent} />
+      {/* Label */}
+      <text x={s(20)} y={s(18)} fontSize={s(6)} fill={fgSoft} fontFamily="sans-serif" letterSpacing={s(1.5)}>USE CASE</text>
+      {/* Title */}
+      <text x={s(20)} y={s(38)} fontSize={s(10)} fontWeight="500" fill={fg} fontFamily="sans-serif">{slide.title.slice(0, 42)}</text>
+      <text x={s(20)} y={s(52)} fontSize={s(7)} fill={fgMid} fontFamily="sans-serif">{slide.subtitle.slice(0, 55)}</text>
+      {/* Two column layout */}
+      <rect x={s(20)} y={s(65)} width={s(135)} height={s(80)} rx={s(2)} fill={surface} />
+      {lineWidths.slice(0, 4).map((w, i) => (
+        <rect key={i} x={s(30)} y={s(78 + i * 14)} width={w * 0.7} height={s(3)} rx={s(1.5)} fill={border} />
+      ))}
+      {/* Right side: icon/diagram placeholder */}
+      <rect x={s(170)} y={s(65)} width={s(120)} height={s(80)} rx={s(2)} fill={surface} />
+      <circle cx={s(230)} cy={s(95)} r={s(16)} fill="none" stroke={accent} strokeWidth={s(1)} strokeDasharray={`${s(4)} ${s(3)}`} />
+      <circle cx={s(230)} cy={s(95)} r={s(8)} fill={accentSoft} />
+      <rect x={s(200)} y={s(120)} width={s(60)} height={s(3)} rx={s(1.5)} fill={border} />
+      <rect x={s(210)} y={s(128)} width={s(40)} height={s(3)} rx={s(1.5)} fill={border} opacity={0.6} />
+      {/* Bottom */}
+      <rect x={0} y={height - s(18)} width={width} height={s(18)} fill={surface} />
+      <g transform={`translate(${width - s(42)}, ${height - s(14)}) scale(${s(0.5)})`}><path d={ciscoBridge} fill={fgSoft} /></g>
+    </svg>
+  );
+}
+
 function SlideCard({ slide, isSelected, onToggle, onPreview }) {
   return (
     <div
@@ -1330,32 +1513,22 @@ function SlideCard({ slide, isSelected, onToggle, onPreview }) {
       onMouseEnter={e => { if (!isSelected) e.currentTarget.style.borderColor = C.textTertiary; }}
       onMouseLeave={e => { if (!isSelected) e.currentTarget.style.borderColor = C.border; }}
     >
-      {/* 16:9 aspect ratio body */}
-      <div style={{ position: "relative", paddingBottom: "56.25%", background: C.surface }}>
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 12 }}>
-          <span style={{ fontSize: 7, fontWeight: 500, letterSpacing: 1.5, textTransform: "uppercase", color: C.textTertiary, marginBottom: 6 }}>
-            {TYPE_LABELS[slide.type]}
-          </span>
-          <span style={{ fontSize: 10, fontWeight: 500, color: C.text, textAlign: "center", lineHeight: 1.3, marginBottom: 4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-            {slide.title}
-          </span>
-          <span style={{ fontSize: 8, color: C.textTertiary, textAlign: "center", lineHeight: 1.3, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-            {slide.subtitle}
-          </span>
-        </div>
-        {/* Checkbox */}
+      {/* Slide preview image */}
+      <div style={{ position: "relative" }}>
+        <SlidePreview slide={slide} width={320} height={180} />
+        {/* Checkbox overlay */}
         <div
           onClick={e => { e.stopPropagation(); onToggle(); }}
           style={{
             position: "absolute", top: 6, left: 6, width: 16, height: 16,
-            border: `1.5px solid ${isSelected ? C.text : C.textTertiary}`,
-            borderRadius: 2, background: isSelected ? C.text : "transparent",
+            border: `1.5px solid ${isSelected ? C.text : "rgba(150,150,150,0.7)"}`,
+            borderRadius: 2, background: isSelected ? C.text : "rgba(255,255,255,0.85)",
             display: "flex", alignItems: "center", justifyContent: "center",
             transition: "all 0.15s ease", cursor: "pointer",
           }}
         >
           {isSelected && (
-            <svg width={10} height={10} viewBox="0 0 24 24" fill="none" stroke={C.bg} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg width={10} height={10} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           )}
@@ -1393,23 +1566,9 @@ function SlideLightbox({ slide, allFilteredSlides, onClose, isSelected, onToggle
       <div onClick={e => e.stopPropagation()} style={{ width: "80vw", maxWidth: 900, background: C.bg, borderRadius: 2, overflow: "hidden", position: "relative" }}>
         {/* Close button */}
         <button onClick={onClose} style={{ position: "absolute", top: 12, right: 12, background: "none", border: "none", cursor: "pointer", zIndex: 10, color: C.textTertiary, fontSize: 20, lineHeight: 1 }}>&times;</button>
-        {/* Slide content */}
-        <div style={{ aspectRatio: "16/9", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 64px", position: "relative" }}>
-          <span style={{ fontSize: 10, fontWeight: 500, letterSpacing: 2, textTransform: "uppercase", color: C.textTertiary, marginBottom: 16 }}>
-            {TYPE_LABELS[current.type]}{current.productId ? ` \u2014 ${current.productId}` : ""}
-          </span>
-          <h2 style={{ fontSize: 32, fontWeight: 300, letterSpacing: "-0.5px", color: C.text, textAlign: "center", marginBottom: 12 }}>{current.title}</h2>
-          <p style={{ fontSize: 15, fontWeight: 300, color: C.textSecondary, textAlign: "center", maxWidth: 600, lineHeight: 1.6 }}>{current.subtitle}</p>
-          {/* Vertical badge */}
-          {current.verticals[0] !== "general" && (
-            <span style={{ marginTop: 16, fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.textTertiary, padding: "3px 8px", border: `1px solid ${C.border}`, borderRadius: 2 }}>
-              {verticals[current.verticals[0]]?.label}
-            </span>
-          )}
-          {/* Cisco logo watermark */}
-          <div style={{ position: "absolute", bottom: 20, right: 28 }}>
-            <CiscoLogo width={40} style={{ opacity: 0.2 }} />
-          </div>
+        {/* Slide preview at full size */}
+        <div style={{ width: "100%", lineHeight: 0 }}>
+          <SlidePreview slide={current} width={900} height={506} />
         </div>
         {/* Bottom bar */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", borderTop: `1px solid ${C.border}` }}>
