@@ -1331,13 +1331,13 @@ function SlidePreview({ slide, width = 320, height = 180, responsive = false }) 
 
   // Cisco brand palette with seeded variation
   const palettes = [
-    { bg1: "#049fd9", bg2: "#036a91", accent: "#00bceb", text: "#fff", textSoft: "rgba(255,255,255,0.85)", panel: "rgba(255,255,255,0.12)", panelSolid: "#0589b8" },
-    { bg1: "#1a1a2e", bg2: "#16213e", accent: "#0096d6", text: "#fff", textSoft: "rgba(255,255,255,0.8)", panel: "rgba(0,150,214,0.15)", panelSolid: "#1b2a4a" },
-    { bg1: "#0d274d", bg2: "#041c32", accent: "#00bceb", text: "#fff", textSoft: "rgba(255,255,255,0.8)", panel: "rgba(0,188,235,0.12)", panelSolid: "#0a3260" },
-    { bg1: "#ffffff", bg2: "#f0f4f8", accent: "#0096d6", text: "#171717", textSoft: "#525252", panel: "#e8f4fa", panelSolid: "#dceef7" },
-    { bg1: "#fbfbfb", bg2: "#f5f5f5", accent: "#049fd9", text: "#171717", textSoft: "#525252", panel: "#eaf6fb", panelSolid: "#d4edf7" },
-    { bg1: "#0b3d2e", bg2: "#072a1f", accent: "#6cc04a", text: "#fff", textSoft: "rgba(255,255,255,0.8)", panel: "rgba(108,192,74,0.12)", panelSolid: "#0d4a37" },
-    { bg1: "#2d1b4e", bg2: "#1a0f30", accent: "#9b59b6", text: "#fff", textSoft: "rgba(255,255,255,0.8)", panel: "rgba(155,89,182,0.15)", panelSolid: "#3a2460" },
+    { bg1: "#049fd9", bg2: "#036a91", accent: "#00bceb", text: "#fff", textSoft: "#e0f0ff", panel: "rgba(255,255,255,0.12)", panelSolid: "#0589b8" },
+    { bg1: "#1a1a2e", bg2: "#16213e", accent: "#0096d6", text: "#fff", textSoft: "#c8d8e8", panel: "rgba(0,150,214,0.15)", panelSolid: "#1b2a4a" },
+    { bg1: "#0d274d", bg2: "#041c32", accent: "#00bceb", text: "#fff", textSoft: "#c8ddf0", panel: "rgba(0,188,235,0.12)", panelSolid: "#0a3260" },
+    { bg1: "#ffffff", bg2: "#f0f4f8", accent: "#0096d6", text: "#171717", textSoft: "#3a3a3a", panel: "#e8f4fa", panelSolid: "#dceef7" },
+    { bg1: "#fbfbfb", bg2: "#f5f5f5", accent: "#049fd9", text: "#171717", textSoft: "#3a3a3a", panel: "#eaf6fb", panelSolid: "#d4edf7" },
+    { bg1: "#0b3d2e", bg2: "#072a1f", accent: "#6cc04a", text: "#fff", textSoft: "#c0e8b0", panel: "rgba(108,192,74,0.12)", panelSolid: "#0d4a37" },
+    { bg1: "#2d1b4e", bg2: "#1a0f30", accent: "#9b59b6", text: "#fff", textSoft: "#d8c0e8", panel: "rgba(155,89,182,0.15)", panelSolid: "#3a2460" },
   ];
   const pIdx = seed % palettes.length;
   const p = palettes[pIdx];
@@ -1361,15 +1361,15 @@ function SlidePreview({ slide, width = 320, height = 180, responsive = false }) 
         <g transform={`translate(${s(24)}, ${s(18)}) scale(${s(1.8)})`}>
           <path d={ciscoBridge} fill="rgba(255,255,255,0.9)" />
         </g>
-        <text x={s(24)} y={s(52)} fontSize={f(7)} fill="rgba(255,255,255,0.75)" fontFamily="sans-serif" letterSpacing={s(2)}>CISCO</text>
+        <text x={s(24)} y={s(52)} fontSize={f(7)} fill="#d0e0f0" fontFamily="sans-serif" letterSpacing={s(2)}>CISCO</text>
         {/* Main title */}
         <text x={s(24)} y={s(88)} fontSize={f(22)} fontWeight="300" fill="#fff" fontFamily="sans-serif">{slide.title}</text>
-        <text x={s(24)} y={s(108)} fontSize={f(9)} fill="rgba(255,255,255,0.9)" fontFamily="sans-serif">{slide.subtitle.slice(0, 50)}</text>
+        <text x={s(24)} y={s(108)} fontSize={f(9)} fill="#e8f0f8" fontFamily="sans-serif">{slide.subtitle.slice(0, 50)}</text>
         {/* Decorative line */}
         <rect x={s(24)} y={s(118)} width={s(50)} height={s(2)} rx={s(1)} fill="#00bceb" />
         {/* Bottom bar */}
         <rect x={0} y={height - s(22)} width={width} height={s(18)} fill="rgba(0,0,0,0.2)" />
-        <text x={s(24)} y={height - s(9)} fontSize={f(6)} fill="rgba(255,255,255,0.75)" fontFamily="sans-serif" letterSpacing={s(1.5)}>CORPORATE MESSAGING FRAMEWORK</text>
+        <text x={s(24)} y={height - s(9)} fontSize={f(6)} fill="#d0e0f0" fontFamily="sans-serif" letterSpacing={s(1.5)}>CORPORATE MESSAGING FRAMEWORK</text>
       </svg>
     );
   }
@@ -1449,10 +1449,10 @@ function SlidePreview({ slide, width = 320, height = 180, responsive = false }) 
           </g>
         )}
         {/* Left content */}
-        <text x={s(20)} y={s(22)} fontSize={f(6)} fill="rgba(255,255,255,0.75)" fontFamily="sans-serif" letterSpacing={s(2)}>PRODUCT</text>
+        <text x={s(20)} y={s(22)} fontSize={f(6)} fill="#d0e0f0" fontFamily="sans-serif" letterSpacing={s(2)}>PRODUCT</text>
         <text x={s(20)} y={s(50)} fontSize={f(16)} fontWeight="300" fill="#fff" fontFamily="sans-serif">{slide.title.slice(0, 20)}</text>
         <rect x={s(20)} y={s(58)} width={s(40)} height={s(2)} rx={s(1)} fill={acc} />
-        <text x={s(20)} y={s(76)} fontSize={f(7)} fill="rgba(255,255,255,0.85)" fontFamily="sans-serif">{slide.subtitle.slice(0, 35)}</text>
+        <text x={s(20)} y={s(76)} fontSize={f(7)} fill="#e0ecf5" fontFamily="sans-serif">{slide.subtitle.slice(0, 35)}</text>
         {/* Stats */}
         {[0, 1, 2].map(i => (
           <g key={i}>
@@ -1570,14 +1570,14 @@ function SlidePreview({ slide, width = 320, height = 180, responsive = false }) 
         </defs>
         <rect width={width} height={height} fill={`url(#${uid}bg)`} />
         <rect x={0} y={0} width={width} height={s(3)} fill="#00bceb" />
-        <text x={s(20)} y={s(20)} fontSize={f(5.5)} fill="rgba(255,255,255,0.75)" fontFamily="sans-serif" letterSpacing={s(2)}>USE CASE</text>
+        <text x={s(20)} y={s(20)} fontSize={f(5.5)} fill="#d0e0f0" fontFamily="sans-serif" letterSpacing={s(2)}>USE CASE</text>
         <text x={s(20)} y={s(42)} fontSize={f(11)} fontWeight="500" fill="#fff" fontFamily="sans-serif">{slide.title.slice(0, 35)}</text>
-        <text x={s(20)} y={s(56)} fontSize={f(6.5)} fill="rgba(255,255,255,0.8)" fontFamily="sans-serif">{slide.subtitle.slice(0, 48)}</text>
+        <text x={s(20)} y={s(56)} fontSize={f(6.5)} fill="#dde8f2" fontFamily="sans-serif">{slide.subtitle.slice(0, 48)}</text>
         {/* Ring/donut chart */}
         <circle cx={s(250)} cy={s(90)} r={s(35)} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={s(8)} />
         <circle cx={s(250)} cy={s(90)} r={s(35)} fill="none" stroke="#00bceb" strokeWidth={s(8)} strokeDasharray={`${s(120)} ${s(100)}`} strokeLinecap="round" transform={`rotate(-90 ${s(250)} ${s(90)})`} />
         <text x={s(250)} y={s(88)} fontSize={f(14)} fontWeight="600" fill="#00bceb" fontFamily="sans-serif" textAnchor="middle">{["72%", "95%", "4.1x", "60%"][(seed) % 4]}</text>
-        <text x={s(250)} y={s(100)} fontSize={f(5)} fill="rgba(255,255,255,0.7)" fontFamily="sans-serif" textAnchor="middle">IMPROVEMENT</text>
+        <text x={s(250)} y={s(100)} fontSize={f(5)} fill="#d0dde8" fontFamily="sans-serif" textAnchor="middle">IMPROVEMENT</text>
         {/* Left bullets */}
         {[0, 1, 2].map(i => (
           <g key={i}>
@@ -1599,9 +1599,9 @@ function SlidePreview({ slide, width = 320, height = 180, responsive = false }) 
       <svg {...svgProps}>
         <rect width={width} height={height} fill="#fff" />
         <rect x={0} y={0} width={s(8)} height={height} fill={acc} />
-        <text x={s(20)} y={s(18)} fontSize={f(5.5)} fill="#666" fontFamily="sans-serif" letterSpacing={s(1.5)}>USE CASE</text>
+        <text x={s(20)} y={s(18)} fontSize={f(5.5)} fill="#444" fontFamily="sans-serif" letterSpacing={s(1.5)}>USE CASE</text>
         <text x={s(20)} y={s(38)} fontSize={f(11)} fontWeight="500" fill="#171717" fontFamily="sans-serif">{slide.title.slice(0, 35)}</text>
-        <text x={s(20)} y={s(52)} fontSize={f(6.5)} fill="#525252" fontFamily="sans-serif">{slide.subtitle.slice(0, 50)}</text>
+        <text x={s(20)} y={s(52)} fontSize={f(6.5)} fill="#333" fontFamily="sans-serif">{slide.subtitle.slice(0, 50)}</text>
         {/* Three icon cards */}
         {[0, 1, 2].map(i => (
           <g key={i}>
