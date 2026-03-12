@@ -1319,11 +1319,14 @@ function BuyersPage() {
 const TYPE_LABELS = { company: "Company", solution: "Solution", product: "Product", initiative: "Initiative", useCase: "Use Case" };
 
 // ── Slide visual templates (rich, colorful, presentation-like) ──
-function SlidePreview({ slide, width = 320, height = 180 }) {
+function SlidePreview({ slide, width = 320, height = 180, responsive = false }) {
   const seed = slide.id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
   const s = (v) => v * width / 320;
   const uid = `g${slide.id.replace(/[^a-z0-9]/gi, "")}`;
   const ciscoBridge = "M8.5 2.5C6 5 4.5 6.5 3 9.5c1.5-1.5 3-2.5 5.5-2.5s4 1 5.5 2.5C12.5 6.5 11 5 8.5 2.5z";
+  const svgProps = responsive
+    ? { width: "100%", height: "100%", viewBox: `0 0 ${width} ${height}`, preserveAspectRatio: "xMidYMid meet", style: { display: "block" } }
+    : { width, height, viewBox: `0 0 ${width} ${height}`, style: { display: "block" } };
 
   // Cisco brand palette with seeded variation
   const palettes = [
@@ -1342,7 +1345,7 @@ function SlidePreview({ slide, width = 320, height = 180 }) {
 
   if (slide.type === "company") {
     return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+      <svg {...svgProps}>
         <defs>
           <linearGradient id={`${uid}bg`} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#049fd9" /><stop offset="100%" stopColor="#003b5c" />
@@ -1379,7 +1382,7 @@ function SlidePreview({ slide, width = 320, height = 180 }) {
     const acc = "#00bceb";
     const pillarColors = ["#049fd9", "#6cc04a", "#f5a623"];
     return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+      <svg {...svgProps}>
         <defs>
           <linearGradient id={`${uid}bg`} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor={isDarkSlide ? "#0d274d" : "#f8fbff"} />
@@ -1421,7 +1424,7 @@ function SlidePreview({ slide, width = 320, height = 180 }) {
     const gradB = isNet ? "#049fd9" : "#2d1b69";
     const acc = isNet ? "#00bceb" : "#9b59b6";
     return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+      <svg {...svgProps}>
         <defs>
           <linearGradient id={`${uid}bg`} x1="0" y1="0" x2="1" y2="0.8">
             <stop offset="0%" stopColor={gradA} /><stop offset="100%" stopColor={gradB} />
@@ -1472,7 +1475,7 @@ function SlidePreview({ slide, width = 320, height = 180 }) {
     const barCount = 5;
     const barH = Array.from({ length: barCount }, (_, i) => s(12 + ((seed * (i + 3) * 7) % 38)));
     return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+      <svg {...svgProps}>
         <defs>
           <linearGradient id={`${uid}bg`} x1="0" y1="0" x2="0.3" y2="1">
             <stop offset="0%" stopColor={pal.bg1} /><stop offset="100%" stopColor={pal.bg2} />
@@ -1522,7 +1525,7 @@ function SlidePreview({ slide, width = 320, height = 180 }) {
   if (layout === 0) {
     // Split layout: left text, right "photo" area with gradient
     return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+      <svg {...svgProps}>
         <rect width={width} height={height} fill={pal.bg1} />
         {/* Right photo area */}
         <defs>
@@ -1558,7 +1561,7 @@ function SlidePreview({ slide, width = 320, height = 180 }) {
   if (layout === 1) {
     // Full dark slide with center content and ring chart
     return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+      <svg {...svgProps}>
         <defs>
           <linearGradient id={`${uid}bg`} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#0d274d" /><stop offset="100%" stopColor="#041c32" />
@@ -1592,7 +1595,7 @@ function SlidePreview({ slide, width = 320, height = 180 }) {
     // Light slide with colored sidebar and icons
     const acc = ["#049fd9", "#6cc04a", "#f5a623", "#e74c3c"][(seed * 3) % 4];
     return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+      <svg {...svgProps}>
         <rect width={width} height={height} fill="#fff" />
         <rect x={0} y={0} width={s(8)} height={height} fill={acc} />
         <text x={s(20)} y={s(18)} fontSize={s(5.5)} fill="#a3a3a3" fontFamily="sans-serif" letterSpacing={s(1.5)}>USE CASE</text>
@@ -1619,7 +1622,7 @@ function SlidePreview({ slide, width = 320, height = 180 }) {
 
   // layout === 3: Gradient slide with timeline/process
   return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ display: "block" }}>
+    <svg {...svgProps}>
       <defs>
         <linearGradient id={`${uid}bg`} x1="0" y1="0" x2="1" y2="0.5">
           <stop offset="0%" stopColor={pal.bg1} /><stop offset="100%" stopColor={pal.bg2} />
@@ -1667,9 +1670,9 @@ function SlideCard({ slide, isSelected, onToggle, onPreview }) {
       onMouseEnter={e => { if (!isSelected) e.currentTarget.style.borderColor = C.textTertiary; }}
       onMouseLeave={e => { if (!isSelected) e.currentTarget.style.borderColor = C.border; }}
     >
-      {/* Slide preview image */}
-      <div style={{ position: "relative" }}>
-        <SlidePreview slide={slide} width={320} height={180} />
+      {/* Slide preview image – 16:9 aspect ratio */}
+      <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
+        <SlidePreview slide={slide} width={320} height={180} responsive />
         {/* Checkbox overlay */}
         <div
           onClick={e => { e.stopPropagation(); onToggle(); }}
