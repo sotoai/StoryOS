@@ -48,6 +48,11 @@ class DeckListItem(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class AssembleDeckRequest(BaseModel):
+    slide_ids: list[str]
+    filename: str = "StoryOS-Deck.pptx"
+
+
 def slide_to_response(slide) -> SlideResponse:
     """Convert a Slide ORM model to a SlideResponse schema."""
     return SlideResponse(

@@ -2,12 +2,13 @@ import shutil
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from ..config import UPLOAD_DIR, THUMBNAIL_DIR, STORAGE_DIR
 from ..database import get_db
 from ..models import Deck, Slide
-from ..schemas import DeckListItem, DeckResponse, slide_to_response
+from ..schemas import AssembleDeckRequest, DeckListItem, DeckResponse, slide_to_response
 from ..services.extractor import extract_deck
 from ..services.thumbnails import generate_thumbnails
 
@@ -119,3 +120,54 @@ def delete_deck(deck_id: str, db: Session = Depends(get_db)):
     # Delete from DB (cascade deletes slides)
     db.delete(deck)
     db.commit()
+
+
+@router.post("/assemble")
+def assemble_deck(body: AssembleDeckRequest, db: Session = Depends(get_db)):
+    """
+    Assemble a .pptx from selected slide IDs.
+    Returns: .pptx file download
+    """
+    slide_ids = body.slide_ids
+    filename = body.filename
+
+    if not slide_ids:
+        raise HTTPException(status_code=400, detail="No slide IDs provided")
+
+    # Look up slides in order
+    slides = []
+    for sid in slide_ids:
+        slide = db.query(Slide).filter(Slide.id == sid).first()
+        if slide:
+            slides.append(slide)
+
+    if not slides:
+        raise HTTPException(status_code=404, detail="No valid slides found")
+
+    # Verify source files exist
+    for slide in slides:
+        source_path = STORAGE_DIR / slide.slide_data_path
+        if not source_path.exists():
+            raise HTTPException(
+                status_code=500,
+                detail=f"Source deck file missing for slide {slide.id}"
+            )
+
+    try:
+        from ..services.assembler import assemble_deck_from_slides
+        output_path = assemble_deck_from_slides(slides, STORAGE_DIR)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Assembly failed: {str(e)}")
+
+    # Sanitize filename
+    if not filename.endswith(".pptx"):
+        filename += ".pptx"
+    safe_filename = "".join(c for c in filename if c.isalnum() or c in " .-_").strip()
+    if not safe_filename:
+        safe_filename = "StoryOS-Deck.pptx"
+
+    return FileResponse(
+        path=str(output_path),
+        filename=safe_filename,
+        media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    )

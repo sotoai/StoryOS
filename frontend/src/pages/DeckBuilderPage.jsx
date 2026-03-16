@@ -24,6 +24,7 @@ export function DeckBuilderPage({ selectedIds, setSelectedIds }) {
   const [expandedInit, setExpandedInit] = useState({});
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [apiSlides, setApiSlides] = useState([]);
+  const [downloading, setDownloading] = useState(false);
 
   const PANEL_MIN = 200;
   const PANEL_MAX = 720;
@@ -106,13 +107,15 @@ export function DeckBuilderPage({ selectedIds, setSelectedIds }) {
 
   const groupSlides = () => {
     const groups = [];
-    const byType = (type) => visibleSlides.filter(s => s.type === type);
-    const companySlides = byType("company");
-    const solutionSlides = byType("solution");
+    const companySlides = visibleSlides.filter(s => s.type === "company");
+    const solutionSlides = visibleSlides.filter(s => s.type === "solution");
     if (companySlides.length) groups.push({ label: "Company", slides: companySlides });
     if (solutionSlides.length) groups.push({ label: "Solution Category", slides: solutionSlides });
     ["networking", "collaboration"].forEach(pid => {
-      const prodSlides = visibleSlides.filter(s => s.productId === pid && s.type !== "story");
+      const prodSlides = visibleSlides.filter(s =>
+        s.productId === pid &&
+        s.type !== "story" && s.type !== "company" && s.type !== "solution"
+      );
       if (prodSlides.length) {
         const prodName = pid === "networking" ? "Cisco Networking" : "Collaboration";
         groups.push({ label: prodName, slides: prodSlides });
@@ -120,8 +123,12 @@ export function DeckBuilderPage({ selectedIds, setSelectedIds }) {
     });
     const storySlides = visibleSlides.filter(s => s.type === "story");
     if (storySlides.length) groups.push({ label: "Customer Stories", slides: storySlides });
-    const uploadedSlides = visibleSlides.filter(s => s._source === "api");
-    if (uploadedSlides.length) groups.push({ label: "UPLOADED SLIDES", slides: uploadedSlides });
+    const untaggedUploaded = visibleSlides.filter(s =>
+      s._source === "api" &&
+      !s.productId &&
+      (!s.type || s.type === "uploaded")
+    );
+    if (untaggedUploaded.length) groups.push({ label: "UNTAGGED UPLOADS", slides: untaggedUploaded });
     return groups;
   };
   const groups = groupSlides();
@@ -132,6 +139,51 @@ export function DeckBuilderPage({ selectedIds, setSelectedIds }) {
   const toggleNode = (key) => setExpandedNodes(prev => ({ ...prev, [key]: !prev[key] }));
   const toggleInit = (id) => setExpandedInit(prev => ({ ...prev, [id]: !prev[id] }));
   const selectedSlides = selectedIds.map(id => combinedSlides.find(s => s.id === id)).filter(Boolean);
+
+  const handleDownload = async () => {
+    // Filter to only API slides (uploaded slides with real .pptx source)
+    const downloadableIds = selectedIds.filter(id => {
+      const slide = combinedSlides.find(s => s.id === id);
+      return slide && slide._source === "api";
+    });
+
+    if (downloadableIds.length === 0) {
+      alert("No uploaded slides selected. Only real .pptx slides can be included in the download. Upload slide decks first, then select those slides.");
+      return;
+    }
+
+    setDownloading(true);
+
+    try {
+      const res = await fetch("/api/decks/assemble", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slide_ids: downloadableIds,
+          filename: "StoryOS-Deck.pptx",
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: "Download failed" }));
+        throw new Error(err.detail || `Server error ${res.status}`);
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "StoryOS-Deck.pptx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert(`Download failed: ${err.message}`);
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const verticalOptions = [["all", "All Verticals"], ...Object.entries(verticals).map(([k, v]) => [k, v.label])];
   const products = getProducts(vertical === "all" ? "general" : vertical);
@@ -455,6 +507,8 @@ export function DeckBuilderPage({ selectedIds, setSelectedIds }) {
         count={selectedIds.length}
         onClear={() => setSelectedIds([])}
         onPreview={() => { if (selectedSlides.length > 0) { setLightboxSlide(selectedSlides[0]); setPreviewMode(true); } }}
+        onDownload={handleDownload}
+        downloading={downloading}
       />
 
       {/* ── LIGHTBOX ── */}

@@ -1,6 +1,6 @@
 import { C } from "../../theme";
 
-export function DeckTray({ count, onClear, onPreview }) {
+export function DeckTray({ count, onClear, onPreview, onDownload, downloading }) {
   if (count === 0) return null;
   return (
     <div style={{
@@ -13,7 +13,17 @@ export function DeckTray({ count, onClear, onPreview }) {
       <div style={{ display: "flex", gap: 8 }}>
         <button onClick={onClear} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: C.textTertiary, padding: "6px 12px" }}>Clear</button>
         <button onClick={onPreview} style={{ background: "none", border: `1px solid ${C.border}`, borderRadius: 2, padding: "6px 16px", cursor: "pointer", fontSize: 11, fontWeight: 500, color: C.text }}>Preview Deck</button>
-        <button onClick={() => alert("PPT export coming soon.")} style={{ background: C.text, color: C.bg, border: "none", borderRadius: 2, padding: "6px 16px", cursor: "pointer", fontSize: 11, fontWeight: 500 }}>Download</button>
+        <button
+          onClick={onDownload}
+          disabled={downloading}
+          style={{
+            background: C.text, color: C.bg, border: "none", borderRadius: 2, padding: "6px 16px",
+            cursor: downloading ? "default" : "pointer", fontSize: 11, fontWeight: 500,
+            opacity: downloading ? 0.6 : 1,
+          }}
+        >
+          {downloading ? "Assembling..." : "Download"}
+        </button>
       </div>
     </div>
   );

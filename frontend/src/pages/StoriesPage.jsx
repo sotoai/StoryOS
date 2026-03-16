@@ -720,6 +720,7 @@ export function StoriesPage({ selectedIds, setSelectedIds }) {
         count={selectedIds.length}
         onClear={() => setSelectedIds([])}
         onPreview={() => {}}
+        onDownload={() => alert("Switch to Deck Builder to download slides.")}
       />
     </div>
   );
