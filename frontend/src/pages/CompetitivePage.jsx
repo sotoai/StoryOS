@@ -9,6 +9,14 @@ const PANEL_MIN = 200;
 const PANEL_MAX = 720;
 const WIDE_THRESHOLD = 420;
 
+function AristaLogo({ size = 20, color }) {
+  return (
+    <svg width={size} height={size * (1099 / 1527)} viewBox="0 0 1527 1099" fill={color} style={{ display: "block" }}>
+      <path d="m874.3 60.8c52.1 84.9 652 1031.4 652 1031.4h-215.2l-547.7-874.7-234.7 378.6h430.4l-110.9 176.3h-430.3l-202.2 326.4h-215.1c0 0 606.4-959.6 652-1031.4 58.7-84.9 163-91.4 221.7-6.6z"/>
+    </svg>
+  );
+}
+
 const categoryColors = { Product: "#049fd9", Analyst: "#8e44ad", Earnings: "#27ae60", Partnership: "#d4a017", Messaging: "#e74c3c" };
 const severityConfig = { urgent: { color: "#e74c3c", label: "Urgent" }, respond: { color: "#d4a017", label: "Respond" }, watch: { color: "#27ae60", label: "Watch" } };
 
@@ -86,11 +94,36 @@ export function CompetitivePage() {
       <div style={{ height: 1, background: C.borderLight, margin: "8px 16px" }} />
 
       {/* Section shortcuts */}
-      {["Threat Assessment", "Battlecard"].map(label => (
-        <div key={label} onClick={() => setActiveFilter({ type: "section", section: label.toLowerCase().replace(" ", "-") })} style={treeItemStyle(activeFilter?.section === label.toLowerCase().replace(" ", "-"))}>
-          <span style={{ fontSize: 11 }}>{label}</span>
-        </div>
-      ))}
+      {["Threat Assessment", "Battlecard"].map(label => {
+        const sectionId = label.toLowerCase().replace(" ", "-");
+        return (
+          <div key={label} data-section={sectionId} onClick={() => {
+            setActiveFilter({ type: "section", section: sectionId });
+            setTimeout(() => {
+              const panel = document.getElementById("competitive-right-panel");
+              const el = document.getElementById(`section-${sectionId}`);
+              if (panel && el) {
+                const target = el.getBoundingClientRect().top - panel.getBoundingClientRect().top + panel.scrollTop - 24;
+                const start = panel.scrollTop;
+                const diff = target - start;
+                if (Math.abs(diff) < 2) return;
+                const duration = 350;
+                const startTime = performance.now();
+                const animate = () => {
+                  const elapsed = performance.now() - startTime;
+                  const progress = Math.min(elapsed / duration, 1);
+                  const ease = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
+                  panel.scrollTop = start + diff * ease;
+                  if (progress < 1) requestAnimationFrame(animate);
+                };
+                requestAnimationFrame(animate);
+              }
+            }, 0);
+          }} style={treeItemStyle(activeFilter?.section === sectionId)}>
+            <span style={{ fontSize: 11 }}>{label}</span>
+          </div>
+        );
+      })}
     </div>
   );
 
@@ -98,7 +131,12 @@ export function CompetitivePage() {
 
   const renderAtAGlance = () => (
     <div style={{ marginBottom: 40 }}>
-      <h1 style={{ fontSize: 28, fontWeight: 300, color: C.text, letterSpacing: "-0.5px", marginBottom: 4 }}>{comp.name}</h1>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
+        <div style={{ width: 36, height: 36, borderRadius: 4, background: C.text, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <AristaLogo size={22} color={C.bg} />
+        </div>
+        <h1 style={{ fontSize: 28, fontWeight: 300, color: C.text, letterSpacing: "-0.5px", margin: 0 }}>{comp.name}</h1>
+      </div>
       <p style={{ fontSize: 14, color: C.textSecondary, fontStyle: "italic", fontWeight: 300, marginBottom: 24 }}>{comp.tagline}</p>
 
       <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
@@ -129,10 +167,18 @@ export function CompetitivePage() {
         {comp.recentMoves.map((item, i) => (
           <div key={i} style={{ display: "flex", gap: 16, padding: "14px 0", borderBottom: i < comp.recentMoves.length - 1 ? `1px solid ${C.borderLight}` : "none" }}>
             <span style={{ fontSize: 11, color: C.textTertiary, width: 65, flexShrink: 0 }}>{item.date}</span>
-            <span style={{ fontSize: 10, padding: "2px 8px", border: `1px solid ${categoryColors[item.category] || C.border}40`, borderRadius: 100, color: categoryColors[item.category] || C.textTertiary, fontWeight: 500, whiteSpace: "nowrap", alignSelf: "flex-start" }}>{item.category}</span>
+            <span style={{ fontSize: 10, padding: "2px 0", width: 76, textAlign: "center", border: `1px solid ${categoryColors[item.category] || C.border}40`, borderRadius: 100, color: categoryColors[item.category] || C.textTertiary, fontWeight: 500, whiteSpace: "nowrap", alignSelf: "flex-start", flexShrink: 0 }}>{item.category}</span>
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{item.title}</p>
               <p style={{ fontSize: 12, fontWeight: 300, color: C.textSecondary, lineHeight: 1.5 }}>{item.description}</p>
+              {item.url && (
+                <a href={item.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: C.textTertiary, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginTop: 4 }}
+                  onMouseEnter={e => e.currentTarget.style.color = C.text}
+                  onMouseLeave={e => e.currentTarget.style.color = C.textTertiary}
+                >
+                  {item.source || "Source"} <span style={{ fontSize: 10 }}>{"\u2197"}</span>
+                </a>
+              )}
             </div>
           </div>
         ))}
@@ -248,7 +294,7 @@ export function CompetitivePage() {
   );
 
   const renderThreats = () => (
-    <div style={{ marginBottom: 40 }}>
+    <div id="section-threat-assessment" style={{ marginBottom: 40 }}>
       <TierLabel>Threat Assessment</TierLabel>
       <div style={{ marginTop: 16 }}>
         {/* Predictions */}
@@ -310,7 +356,7 @@ export function CompetitivePage() {
   );
 
   const renderBattlecard = () => (
-    <div style={{ marginBottom: 40 }}>
+    <div id="section-battlecard" style={{ marginBottom: 40 }}>
       <TierLabel>Battlecard — Quick Reference</TierLabel>
       <div style={{ marginTop: 16, border: `1px solid ${C.border}`, borderRadius: 2, overflow: "hidden" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 120px", padding: "10px 16px", background: C.surface, borderBottom: `1px solid ${C.border}`, fontSize: 9, letterSpacing: 1.5, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase" }}>
@@ -337,11 +383,16 @@ export function CompetitivePage() {
       <div style={{ width: panelWidth, borderRight: `1px solid ${C.border}`, background: C.surface, display: "flex", flexDirection: "column", flexShrink: 0, overflow: "hidden" }}>
         <div style={{ padding: "20px 20px 16px", borderBottom: `1px solid ${C.border}` }}>
           <h2 style={{ fontSize: 15, fontWeight: 500, letterSpacing: "-0.3px", color: C.text, marginBottom: 8 }}>Competitive</h2>
-          <select value={competitorId} style={selectStyle} readOnly>
-            <option value="arista">Arista Networks</option>
-            <option disabled>Juniper / HPE — Coming Soon</option>
-            <option disabled>Fortinet — Coming Soon</option>
-          </select>
+          <div style={{ position: "relative" }}>
+            <select value={competitorId} style={{ ...selectStyle, paddingLeft: 36 }} readOnly>
+              <option value="arista">Arista Networks</option>
+              <option disabled>Juniper / HPE — Coming Soon</option>
+              <option disabled>Fortinet — Coming Soon</option>
+            </select>
+            <div style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", width: 20, height: 20, borderRadius: 3, background: C.text, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+              <AristaLogo size={13} color={C.bg} />
+            </div>
+          </div>
         </div>
         <div style={{ flex: 1, overflowY: "auto" }}>
           {renderTree()}
@@ -357,7 +408,7 @@ export function CompetitivePage() {
       />
 
       {/* ── RIGHT PANEL ── */}
-      <div style={{ flex: 1, overflowY: "auto" }}>
+      <div id="competitive-right-panel" style={{ flex: 1, overflowY: "auto" }}>
         <div style={{ padding: "24px 32px 96px", maxWidth: 960 }}>
           {renderAtAGlance()}
           {renderTimeline()}
