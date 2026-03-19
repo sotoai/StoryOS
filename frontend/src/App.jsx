@@ -22,8 +22,8 @@ const navItems = [
 
 // ─── APP ───────────────────────────────────────────────────────────────────────
 
-export default function App() {
-  const [isDark, setIsDark] = useState(false);
+export default function App({ embedded = false }) {
+  const [isDark, setIsDark] = useState(embedded);
   setTheme(isDark);
   const [activePage, setActivePage] = useState("messaging");
   const [selectedIds, setSelectedIds] = useState([]);

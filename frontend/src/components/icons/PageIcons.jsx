@@ -78,6 +78,54 @@ export function IconUseCase({ size = 12 }) {
   );
 }
 
+// Pillar icons — three pillars of Futureproof Workplace
+export function IconAgenticOps({ size = 14, color }) {
+  const c = color || C.textTertiary;
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="3" />
+      <path d="M12 11v4" />
+      <path d="M8 21a4 4 0 0 1 8 0" />
+      <path d="M17 6l2-2" />
+      <path d="M19 8h2" />
+      <path d="M5 6L3 4" />
+      <path d="M3 8H1" />
+      <circle cx="12" cy="8" r="1" fill={c} stroke="none" />
+    </svg>
+  );
+}
+
+export function IconSecurityFused({ size = 14, color }) {
+  const c = color || C.textTertiary;
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z" />
+      <path d="M8 12h8" />
+      <path d="M12 8v8" />
+    </svg>
+  );
+}
+
+export function IconAIDevices({ size = 14, color }) {
+  const c = color || C.textTertiary;
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="3" width="16" height="12" rx="2" />
+      <path d="M8 21h8" />
+      <path d="M12 15v6" />
+      <circle cx="9" cy="9" r="1.5" fill={c} stroke="none" />
+      <circle cx="15" cy="9" r="1.5" fill={c} stroke="none" />
+      <path d="M9 12h6" strokeWidth="1" />
+    </svg>
+  );
+}
+
+export const pillarIcons = {
+  "AgenticOps for Operational Simplicity": IconAgenticOps,
+  "Security Fused into the Network": IconSecurityFused,
+  "AI-Ready Devices": IconAIDevices,
+};
+
 export const productIcons = {
   networking: IconNetworking,
   collaboration: IconCollaboration,

@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "frontend", "run", "dev"],
       "port": 5173
+    },
+    {
+      "name": "presentation",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "presentation", "run", "dev"],
+      "port": 5174
     }
   ]
 }

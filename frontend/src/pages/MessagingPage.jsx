@@ -3,10 +3,27 @@ import { C } from "../theme";
 import { fw } from "../data/framework";
 import { verticals } from "../data/verticals";
 import { CiscoLogo } from "../components/icons/CiscoLogo";
-import { IconCompany, IconSolution, IconInitiative, IconUseCase, productIcons } from "../components/icons/PageIcons";
+import { IconCompany, IconSolution, IconInitiative, IconUseCase, productIcons, pillarIcons } from "../components/icons/PageIcons";
 import { Connector, SplitConnector } from "../components/shared/Connector";
 import { TierLabel } from "../components/shared/TierLabel";
 import { PageShell } from "../components/shared/PageShell";
+import { DetailModal } from "../components/shared/DetailModal";
+
+function MoreButton({ onClick }) {
+  return (
+    <span
+      onClick={(e) => { e.stopPropagation(); onClick(); }}
+      style={{
+        fontSize: 12, fontWeight: 500, color: C.textTertiary, cursor: "pointer",
+        display: "inline-block", marginTop: 12,
+      }}
+      onMouseEnter={e => e.currentTarget.style.color = C.text}
+      onMouseLeave={e => e.currentTarget.style.color = C.textTertiary}
+    >
+      More ›
+    </span>
+  );
+}
 
 export function MessagingPage() {
   const [expandCompany, setExpandCompany] = useState(false);
@@ -14,6 +31,7 @@ export function MessagingPage() {
   const [activeProduct, setActiveProduct] = useState("networking");
   const [expandedInit, setExpandedInit] = useState({});
   const [vertical, setVertical] = useState("general");
+  const [detailModal, setDetailModal] = useState(null);
 
   const v = verticals[vertical];
   const getProducts = () => {
@@ -86,13 +104,54 @@ export function MessagingPage() {
           }}>&#8964;</span>
         </div>
         {expandCompany && (
-          <p style={{
-            fontSize: 14, color: C.textSecondary, lineHeight: 1.8,
-            marginTop: 20, paddingTop: 20,
-            borderTop: `1px solid ${C.borderLight}`, fontWeight: 300,
-          }}>
-            {fw.company.description}
-          </p>
+          <div style={{ marginTop: 20, paddingTop: 20, borderTop: `1px solid ${C.borderLight}` }}>
+            <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 }}>
+              {fw.company.description}
+            </p>
+
+            {/* Design Philosophy Cards */}
+            {fw.company.detail && fw.company.detail.sections.length >= 2 && (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 20 }}>
+                {fw.company.detail.sections.slice(0, 2).map((section, i) => (
+                  <div
+                    key={i}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setDetailModal({
+                        title: section.title.replace("Design Philosophy: ", ""),
+                        tagline: "Design Philosophy",
+                        description: section.content,
+                        detail: null,
+                      });
+                    }}
+                    style={{
+                      padding: 16, border: `1px solid ${C.borderLight}`, borderRadius: 2, background: C.surface,
+                      cursor: "pointer", transition: "all 0.15s",
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.background = C.accentSoft; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = C.borderLight; e.currentTarget.style.background = C.surface; }}
+                  >
+                    <p style={{
+                      fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary,
+                      textTransform: "uppercase", marginBottom: 8,
+                    }}>{section.title.replace("Design Philosophy: ", "")}</p>
+                    <p style={{
+                      fontSize: 13, color: C.textSecondary, lineHeight: 1.6, fontWeight: 300, margin: 0,
+                      display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden",
+                    }}>{section.content}</p>
+                    <span style={{ fontSize: 12, fontWeight: 500, color: C.textTertiary, display: "inline-block", marginTop: 10 }}>More ›</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <MoreButton onClick={() => setDetailModal({
+              title: fw.company.headline,
+              tagline: fw.company.tagline,
+              description: fw.company.description,
+              detail: fw.company.detail,
+            })} />
+          </div>
         )}
       </div>
 
@@ -120,17 +179,6 @@ export function MessagingPage() {
             <p style={{ fontSize: 14, color: C.textSecondary, fontWeight: 300, marginBottom: 16 }}>
               {vertical !== "general" && v.solutionTagline ? v.solutionTagline : fw.solutionCategory.tagline}
             </p>
-            <div style={{ display: "flex", gap: 6 }}>
-              {fw.solutionCategory.pillars.map((p, i) => (
-                <span key={i} style={{
-                  fontSize: 11, fontWeight: 400, color: C.textSecondary,
-                  padding: "4px 12px", border: `1px solid ${C.border}`,
-                  borderRadius: 100,
-                }}>
-                  {p.label}
-                </span>
-              ))}
-            </div>
           </div>
           <span style={{
             fontSize: 20, color: C.textTertiary, fontWeight: 200,
@@ -144,6 +192,28 @@ export function MessagingPage() {
             <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300, marginBottom: 20 }}>{fw.solutionCategory.vision}</p>
             <p style={{ fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 }}>Solution Narrative</p>
             <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 }}>{fw.solutionCategory.solution}</p>
+
+            {/* Pillar pills with icons */}
+            <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
+              {fw.solutionCategory.pillars.map((p, i) => {
+                const Icon = pillarIcons[p.label];
+                return (
+                  <span key={i} style={{ fontSize: 12, color: C.textSecondary, padding: "5px 12px", border: `1px solid ${C.border}`, borderRadius: 100, display: "inline-flex", alignItems: "center", gap: 6, fontWeight: 400 }}>
+                    {Icon && <Icon size={13} color={C.textSecondary} />}
+                    {p.label}
+                  </span>
+                );
+              })}
+            </div>
+
+            {fw.solutionCategory.detail && (
+              <MoreButton onClick={() => setDetailModal({
+                title: fw.solutionCategory.headline,
+                tagline: fw.solutionCategory.tagline,
+                description: fw.solutionCategory.vision,
+                detail: fw.solutionCategory.detail,
+              })} />
+            )}
           </div>
         )}
       </div>
@@ -200,6 +270,15 @@ export function MessagingPage() {
             <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 }}>
               {product.description}
             </p>
+
+            {product.detail && (
+              <MoreButton onClick={() => setDetailModal({
+                title: product.name,
+                tagline: product.tagline,
+                description: product.description,
+                detail: product.detail,
+              })} />
+            )}
           </div>
 
           <div style={{ height: 1, background: C.borderLight, margin: "0 32px" }} />
@@ -211,6 +290,7 @@ export function MessagingPage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: C.border, border: `1px solid ${C.border}`, borderRadius: 2, overflow: "hidden" }}>
               {product.initiatives.map(init => {
                 const isOpen = !!expandedInit[init.id];
+                const InitIcon = init.pillar ? pillarIcons[init.pillar] : null;
                 return (
                   <div key={init.id} style={{ background: C.bg, display: "flex", flexDirection: "column" }}>
                     <div
@@ -224,9 +304,12 @@ export function MessagingPage() {
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                         <div style={{ flex: 1 }}>
-                          <p style={{ fontSize: 14, fontWeight: 500, color: C.text, marginBottom: 4, lineHeight: 1.35 }}>
-                            {init.name}
-                          </p>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, minHeight: 38 }}>
+                            {InitIcon && <InitIcon size={16} color={C.text} />}
+                            <p style={{ fontSize: 14, fontWeight: 500, color: C.text, lineHeight: 1.35, margin: 0 }}>
+                              {init.name}
+                            </p>
+                          </div>
                           <p style={{ fontSize: 12, color: C.textTertiary, fontWeight: 300 }}>
                             {init.tagline}
                           </p>
@@ -238,12 +321,22 @@ export function MessagingPage() {
                         }}>&#8964;</span>
                       </div>
                       {isOpen && (
-                        <p style={{
-                          fontSize: 13, color: C.textSecondary, lineHeight: 1.7, fontWeight: 300,
-                          marginTop: 12, paddingTop: 12, borderTop: `1px solid ${C.borderLight}`,
-                        }}>
-                          {init.description}
-                        </p>
+                        <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${C.borderLight}` }}>
+                          <p style={{
+                            fontSize: 13, color: C.textSecondary, lineHeight: 1.7, fontWeight: 300,
+                          }}>
+                            {init.description}
+                          </p>
+
+                          {init.detail && (
+                            <MoreButton onClick={() => setDetailModal({
+                              title: init.name,
+                              tagline: init.tagline,
+                              description: init.description,
+                              detail: init.detail,
+                            })} />
+                          )}
+                        </div>
                       )}
                     </div>
 
@@ -278,7 +371,17 @@ export function MessagingPage() {
         </p>
         <CiscoLogo width={72} style={{ filter: C.logoFilter }} />
       </div>
+
+      {/* ── DETAIL MODAL ── */}
+      {detailModal && (
+        <DetailModal
+          title={detailModal.title}
+          tagline={detailModal.tagline}
+          description={detailModal.description}
+          detail={detailModal.detail}
+          onClose={() => setDetailModal(null)}
+        />
+      )}
     </PageShell>
   );
 }
-

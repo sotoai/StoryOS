@@ -3,7 +3,7 @@ import { C } from "../theme";
 import { fw } from "../data/framework";
 import { verticals } from "../data/verticals";
 import { allSlides } from "../data/slides";
-import { IconCompany, IconSolution, IconNetworking, IconInitiative, productIcons } from "../components/icons/PageIcons";
+import { IconCompany, IconSolution, IconNetworking, IconInitiative, productIcons, pillarIcons } from "../components/icons/PageIcons";
 import { SlideCard } from "../components/slides/SlideCard";
 import { SlideLightbox } from "../components/slides/SlideLightbox";
 import { DeckTray } from "../components/shared/DeckTray";
@@ -319,10 +319,16 @@ export function DeckBuilderPage({ selectedIds, setSelectedIds }) {
         onClick={() => setActiveFilter(isFilterMatch({ type: "solution" }) ? null : { type: "solution" })}
         isActive={isFilterMatch({ type: "solution" })}
       >
-        <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
-          {fw.solutionCategory.pillars.map((p, i) => (
-            <span key={i} style={{ fontSize: 8, color: C.textTertiary, padding: "2px 8px", border: `1px solid ${C.border}`, borderRadius: 100 }}>{p.label}</span>
-          ))}
+        <div style={{ display: "flex", gap: 4, marginTop: 8, flexWrap: "wrap" }}>
+          {fw.solutionCategory.pillars.map((p, i) => {
+            const Icon = pillarIcons[p.label];
+            return (
+              <span key={i} style={{ fontSize: 8, color: C.textTertiary, padding: "2px 8px", border: `1px solid ${C.border}`, borderRadius: 100, display: "inline-flex", alignItems: "center", gap: 3 }}>
+                {Icon && <Icon size={9} />}
+                {p.label}
+              </span>
+            );
+          })}
         </div>
       </MiniCard>
 

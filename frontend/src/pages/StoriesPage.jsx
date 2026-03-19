@@ -5,7 +5,7 @@ import { verticals } from "../data/verticals";
 import { tagsDef } from "../data/tags";
 import { stories, StoryThumbnail } from "../data/stories";
 import { allSlides } from "../data/slides";
-import { IconCompany, IconSolution, IconNetworking, IconCollaboration, IconInitiative, productIcons } from "../components/icons/PageIcons";
+import { IconCompany, IconSolution, IconNetworking, IconCollaboration, IconInitiative, productIcons, pillarIcons } from "../components/icons/PageIcons";
 import { TierLabel } from "../components/shared/TierLabel";
 import { TagPill } from "../components/shared/TagPill";
 import { DeckTray } from "../components/shared/DeckTray";
@@ -404,10 +404,16 @@ export function StoriesPage({ selectedIds, setSelectedIds }) {
               >
                 <p style={{ fontSize: 13, fontWeight: 400, color: C.text, marginBottom: 2 }}>{fw.solutionCategory.headline}</p>
                 <p style={{ fontSize: 11, color: C.textTertiary, fontWeight: 300 }}>{vData?.solutionTagline || fw.solutionCategory.tagline}</p>
-                <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
-                  {fw.solutionCategory.pillars.map((p, i) => (
-                    <span key={i} style={{ fontSize: 8, color: C.textTertiary, padding: "2px 8px", border: `1px solid ${C.border}`, borderRadius: 100 }}>{p.label}</span>
-                  ))}
+                <div style={{ display: "flex", gap: 4, marginTop: 8, flexWrap: "wrap" }}>
+                  {fw.solutionCategory.pillars.map((p, i) => {
+                    const Icon = pillarIcons[p.label];
+                    return (
+                      <span key={i} style={{ fontSize: 8, color: C.textTertiary, padding: "2px 8px", border: `1px solid ${C.border}`, borderRadius: 100, display: "inline-flex", alignItems: "center", gap: 3 }}>
+                        {Icon && <Icon size={9} />}
+                        {p.label}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
 
