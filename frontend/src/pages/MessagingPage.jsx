@@ -9,6 +9,41 @@ import { TierLabel } from "../components/shared/TierLabel";
 import { PageShell } from "../components/shared/PageShell";
 import { DetailModal } from "../components/shared/DetailModal";
 
+function InfoTip({ text }) {
+  const [show, setShow] = useState(false);
+  return (
+    <span
+      style={{ position: "relative", display: "inline-flex", alignItems: "center", marginLeft: 6 }}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      <span style={{
+        width: 14, height: 14, borderRadius: "50%",
+        border: `1px solid ${show ? C.text : C.textTertiary}`,
+        color: show ? C.text : C.textTertiary,
+        fontSize: 9, fontWeight: 500, fontStyle: "italic",
+        display: "inline-flex", alignItems: "center", justifyContent: "center",
+        cursor: "help", transition: "all 0.15s",
+        fontFamily: "Georgia, serif",
+      }}>
+        i
+      </span>
+      {show && (
+        <span style={{
+          position: "absolute", top: 20, left: -4,
+          width: 280, padding: "10px 14px",
+          background: C.bg, border: `1px solid ${C.border}`, borderRadius: 2,
+          fontSize: 12, fontWeight: 300, lineHeight: 1.6, color: C.textSecondary,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+          zIndex: 50, pointerEvents: "none",
+        }}>
+          {text}
+        </span>
+      )}
+    </span>
+  );
+}
+
 function MoreButton({ onClick }) {
   return (
     <span
@@ -75,8 +110,9 @@ export function MessagingPage() {
       </div>
 
       {/* ── TIER 1: ONE CISCO ── */}
-      <div style={{ marginBottom: 6 }}>
+      <div style={{ marginBottom: 6, display: "flex", alignItems: "center" }}>
         <TierLabel icon={<IconCompany size={16} />}>Company</TierLabel>
+        <InfoTip text="Long-term strategic vision. Sets the direction for our customers, encouraging multi-year alignment with Cisco as a platform partner." />
       </div>
       <div
         className="card"
@@ -158,8 +194,9 @@ export function MessagingPage() {
       <Connector />
 
       {/* ── TIER 2: SOLUTION CATEGORY ── */}
-      <div style={{ marginBottom: 6 }}>
+      <div style={{ marginBottom: 6, display: "flex", alignItems: "center" }}>
         <TierLabel icon={<IconSolution size={16} />}>Solution Category</TierLabel>
+        <InfoTip text="Strategic areas of innovation that support company-level priorities. This is how Cisco organizes its response to the market shift." />
       </div>
       <div
         className="card"
@@ -193,18 +230,6 @@ export function MessagingPage() {
             <p style={{ fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 }}>Solution Narrative</p>
             <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 }}>{fw.solutionCategory.solution}</p>
 
-            {/* Pillar pills with icons */}
-            <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
-              {fw.solutionCategory.pillars.map((p, i) => {
-                const Icon = pillarIcons[p.label];
-                return (
-                  <span key={i} style={{ fontSize: 12, color: C.textSecondary, padding: "5px 12px", border: `1px solid ${C.border}`, borderRadius: 100, display: "inline-flex", alignItems: "center", gap: 6, fontWeight: 400 }}>
-                    {Icon && <Icon size={13} color={C.textSecondary} />}
-                    {p.label}
-                  </span>
-                );
-              })}
-            </div>
 
             {fw.solutionCategory.detail && (
               <MoreButton onClick={() => setDetailModal({
@@ -221,8 +246,9 @@ export function MessagingPage() {
       <SplitConnector />
 
       {/* ── TIER 3: PRODUCTS ── */}
-      <div style={{ marginBottom: 8 }}>
+      <div style={{ marginBottom: 8, display: "flex", alignItems: "center" }}>
         <TierLabel>Product</TierLabel>
+        <InfoTip text="Specific solution offerings that map to customer needs. Each product has its own market position, competitive landscape, and buyer set." />
       </div>
 
       <div style={{
@@ -284,8 +310,9 @@ export function MessagingPage() {
           <div style={{ height: 1, background: C.borderLight, margin: "0 32px" }} />
 
           <div style={{ padding: "28px 32px 36px" }}>
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 20, display: "flex", alignItems: "center" }}>
               <TierLabel icon={<IconInitiative size={14} />}>Initiatives</TierLabel>
+              <InfoTip text="Customer-relevant priorities that drive engagement. These are the themes customers recognize from their own board-level conversations." />
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: C.border, border: `1px solid ${C.border}`, borderRadius: 2, overflow: "hidden" }}>
               {product.initiatives.map(init => {
@@ -347,6 +374,7 @@ export function MessagingPage() {
                         <span style={{ fontSize: 9, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase" }}>
                           Projects
                         </span>
+                        <InfoTip text="Funded near-term priorities. These are the specific buying drivers that create urgency and unlock budget today." />
                       </div>
                       {init.projects.map((proj, i) => (
                         <div key={i} style={{
