@@ -56,6 +56,8 @@ export default function App({ embedded = false }) {
         .tab:hover { color: ${C.text} !important; }
         .nav-item { transition: all 0.15s ease; cursor: pointer; border: none; outline: none; background: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 0; width: 100%; }
         .nav-item:hover { background: ${C.accentSoft}; }
+        .faded-tile { transition: opacity 0.3s ease; }
+        .faded-tile:hover { opacity: 0.6 !important; }
       `}</style>
 
       {/* ── SIDEBAR ── */}

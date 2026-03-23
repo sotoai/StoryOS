@@ -198,49 +198,94 @@ export function MessagingPage() {
         <TierLabel icon={<IconSolution size={16} />}>Solution Category</TierLabel>
         <InfoTip text="Strategic areas of innovation that support company-level priorities. This is how Cisco organizes its response to the market shift." />
       </div>
-      <div
-        className="card"
-        onClick={() => setExpandSolution(!expandSolution)}
-        style={{
-          padding: "28px 32px",
+      <div style={{ display: "flex", alignItems: "stretch", gap: 12 }}>
+        {/* Faded left tile – AI Ready Data Centers */}
+        <div className="faded-tile" style={{
+          flex: "0 0 140px",
+          padding: "24px 16px",
           border: `1px solid ${C.border}`,
           borderRadius: 2,
           background: C.bg,
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-          <div>
-            <h2 style={{ fontSize: 28, fontWeight: 300, letterSpacing: "-0.5px", marginBottom: 6 }}>
-              {fw.solutionCategory.headline}
-            </h2>
-            <p style={{ fontSize: 14, color: C.textSecondary, fontWeight: 300, marginBottom: 16 }}>
-              {vertical !== "general" && v.solutionTagline ? v.solutionTagline : fw.solutionCategory.tagline}
-            </p>
-          </div>
-          <span style={{
-            fontSize: 20, color: C.textTertiary, fontWeight: 200,
-            transform: expandSolution ? "rotate(180deg)" : "none",
-            transition: "transform 0.3s", display: "inline-block", flexShrink: 0,
-          }}>&#8964;</span>
+          opacity: 0.35,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,1) 100%)",
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,1) 100%)",
+          cursor: "default",
+          userSelect: "none",
+        }}>
+          <p style={{ fontSize: 13, fontWeight: 300, color: C.textSecondary, lineHeight: 1.4 }}>AI Ready<br/>Data Centers</p>
         </div>
-        {expandSolution && (
-          <div style={{ marginTop: 24, paddingTop: 24, borderTop: `1px solid ${C.borderLight}` }}>
-            <p style={{ fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 }}>Vision</p>
-            <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300, marginBottom: 20 }}>{fw.solutionCategory.vision}</p>
-            <p style={{ fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 }}>Solution Narrative</p>
-            <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 }}>{fw.solutionCategory.solution}</p>
 
-
-            {fw.solutionCategory.detail && (
-              <MoreButton onClick={() => setDetailModal({
-                title: fw.solutionCategory.headline,
-                tagline: fw.solutionCategory.tagline,
-                description: fw.solutionCategory.vision,
-                detail: fw.solutionCategory.detail,
-              })} />
-            )}
+        {/* Active center tile – Futureproof Workplace */}
+        <div
+          className="card"
+          onClick={() => setExpandSolution(!expandSolution)}
+          style={{
+            flex: 1,
+            padding: "28px 32px",
+            border: `1px solid ${C.border}`,
+            borderRadius: 2,
+            background: C.bg,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <div>
+              <h2 style={{ fontSize: 28, fontWeight: 300, letterSpacing: "-0.5px", marginBottom: 6 }}>
+                {fw.solutionCategory.headline}
+              </h2>
+              <p style={{ fontSize: 14, color: C.textSecondary, fontWeight: 300, marginBottom: 16 }}>
+                {vertical !== "general" && v.solutionTagline ? v.solutionTagline : fw.solutionCategory.tagline}
+              </p>
+            </div>
+            <span style={{
+              fontSize: 20, color: C.textTertiary, fontWeight: 200,
+              transform: expandSolution ? "rotate(180deg)" : "none",
+              transition: "transform 0.3s", display: "inline-block", flexShrink: 0,
+            }}>&#8964;</span>
           </div>
-        )}
+          {expandSolution && (
+            <div style={{ marginTop: 24, paddingTop: 24, borderTop: `1px solid ${C.borderLight}` }}>
+              <p style={{ fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 }}>Vision</p>
+              <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300, marginBottom: 20 }}>{fw.solutionCategory.vision}</p>
+              <p style={{ fontSize: 10, letterSpacing: 2, fontWeight: 500, color: C.textTertiary, textTransform: "uppercase", marginBottom: 8 }}>Solution Narrative</p>
+              <p style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.8, fontWeight: 300 }}>{fw.solutionCategory.solution}</p>
+
+              {fw.solutionCategory.detail && (
+                <MoreButton onClick={() => setDetailModal({
+                  title: fw.solutionCategory.headline,
+                  tagline: fw.solutionCategory.tagline,
+                  description: fw.solutionCategory.vision,
+                  detail: fw.solutionCategory.detail,
+                })} />
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Faded right tile – Digital Resilience */}
+        <div className="faded-tile" style={{
+          flex: "0 0 140px",
+          padding: "24px 16px",
+          border: `1px solid ${C.border}`,
+          borderRadius: 2,
+          background: C.bg,
+          opacity: 0.35,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          maskImage: "linear-gradient(to left, transparent 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,1) 100%)",
+          WebkitMaskImage: "linear-gradient(to left, transparent 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,1) 100%)",
+          cursor: "default",
+          userSelect: "none",
+        }}>
+          <p style={{ fontSize: 13, fontWeight: 300, color: C.textSecondary, lineHeight: 1.4 }}>Digital<br/>Resilience</p>
+        </div>
       </div>
 
       <SplitConnector />
@@ -394,10 +439,7 @@ export function MessagingPage() {
         </div>
       )}
 
-      <div style={{ marginTop: 48, paddingTop: 24, borderTop: `1px solid ${C.borderLight}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <p style={{ fontSize: 12, color: C.textTertiary, fontWeight: 300, lineHeight: 1.6 }}>
-          Company &rarr; Solution Category &rarr; Product &times;2 &rarr; Initiative &times;3 &rarr; Project &times;3
-        </p>
+      <div style={{ marginTop: 48, paddingTop: 24, borderTop: `1px solid ${C.borderLight}`, display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
         <CiscoLogo width={72} style={{ filter: C.logoFilter }} />
       </div>
 
