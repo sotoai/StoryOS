@@ -124,7 +124,7 @@ export function CoAuthorPage({ setActivePage }) {
   const minDate = timelineDates.length > 0 ? new Date(Math.min(...timelineDates) - 25 * 86400000) : new Date("2025-05-01");
   const maxDate = timelineDates.length > 0 ? new Date(Math.max(...timelineDates) + 25 * 86400000) : new Date("2026-04-01");
   const totalDays = (maxDate - minDate) / 86400000;
-  const timelineWidth = Math.max(totalDays * 3, 700);
+  const timelineWidth = Math.max(totalDays * 6, 1200);
   const getX = (dateStr) => ((new Date(dateStr + "T00:00:00") - minDate) / 86400000 / totalDays) * timelineWidth;
 
   const monthLabels = [];
@@ -593,14 +593,20 @@ export function CoAuthorPage({ setActivePage }) {
 
                     {/* Flat artifact list */}
                     {[
-                      ...selectedMoment.decks.map(d => ({ ...d, _type: "deck", _icon: "📄" })),
-                      ...selectedMoment.transcripts.map(t => ({ ...t, _type: "transcript", _icon: "🎙" })),
+                      ...selectedMoment.decks.map(d => ({ ...d, _type: "deck", _icon: "pptx" })),
+                      ...selectedMoment.transcripts.map(t => ({ ...t, _type: "transcript", _icon: "txt" })),
                       ...(selectedMoment.spaces || []).map(s => ({ ...s, _type: "space", _icon: "webex" })),
                     ].map(item => {
                       const pinned = isPinned(item.id);
+                      const iconEl = item._icon === "webex" ? <IconCollaboration size={14} />
+                        : item._icon === "pptx" ? (
+                          <svg width={14} height={14} viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="1.5" fill="#185ABD" /><text x="8" y="11" textAnchor="middle" fill="#fff" fontSize="6.5" fontWeight="700" fontFamily="Inter, sans-serif">P</text></svg>
+                        ) : item._icon === "txt" ? (
+                          <svg width={14} height={14} viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="1.5" fill="#6B7280" /><text x="8" y="11" textAnchor="middle" fill="#fff" fontSize="5" fontWeight="700" fontFamily="Inter, sans-serif">TXT</text></svg>
+                        ) : <span style={{ fontSize: 13 }}>{item._icon}</span>;
                       return (
                         <div key={item.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}>
-                          <span style={{ fontSize: 13, flexShrink: 0, display: "inline-flex", alignItems: "center" }}>{item._icon === "webex" ? <IconCollaboration size={14} /> : item._icon}</span>
+                          <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center" }}>{iconEl}</span>
                           <span style={{ fontSize: 12, color: C.text, fontWeight: 400, flex: 1 }}>{item.title}</span>
                           <span style={{ fontSize: 10, color: C.textTertiary }}>
                             {item.pages && `${item.pages} pages`}{item.duration && item.duration}{item.members && `${item.members} members`}
