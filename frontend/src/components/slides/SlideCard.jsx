@@ -1,14 +1,17 @@
 import { C } from "../../theme";
 import { SlidePreview } from "./SlidePreview";
+import { layerMeta } from "../../data/slides";
 
 export function SlideCard({ slide, isSelected, onToggle, onPreview }) {
+  const lm = slide.layer ? layerMeta[slide.layer] : null;
   return (
     <div
+      className="card"
       onClick={onPreview}
       style={{
         position: "relative", border: `1px solid ${isSelected ? C.text : C.border}`,
         borderRadius: 2, background: C.bg, cursor: "pointer", overflow: "hidden",
-        transition: "all 0.2s ease", boxShadow: isSelected ? `0 0 0 1px ${C.text}` : "none",
+        boxShadow: isSelected ? `0 0 0 1px ${C.text}` : "none",
       }}
       onMouseEnter={e => { if (!isSelected) e.currentTarget.style.borderColor = C.textTertiary; }}
       onMouseLeave={e => { if (!isSelected) e.currentTarget.style.borderColor = C.border; }}
@@ -41,6 +44,12 @@ export function SlideCard({ slide, isSelected, onToggle, onPreview }) {
             </svg>
           )}
         </div>
+        {/* Layer badge */}
+        {lm && (
+          <div style={{ position: "absolute", bottom: 4, right: 4, fontSize: 7, padding: "1px 5px", borderRadius: 3, background: "rgba(0,0,0,0.55)", color: "#fff", fontWeight: 500, letterSpacing: 0.3, display: "flex", alignItems: "center", gap: 2, pointerEvents: "none" }}>
+            <span style={{ fontSize: 6 }}>{lm.icon}</span> {lm.label}
+          </div>
+        )}
       </div>
       {/* Bottom accent bar */}
       <div style={{ height: 2, background: isSelected ? C.text : C.border, transition: "background 0.2s ease" }} />

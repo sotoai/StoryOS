@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { C, setTheme } from "./theme";
 import { CiscoLogo } from "./components/icons/CiscoLogo";
 import { NavIconMessaging, NavIconBuyers, NavIconStories, NavIconCoAuthor, NavIconDeck, NavIconCompetitive } from "./components/icons/NavIcons";
@@ -30,6 +30,33 @@ export default function App({ embedded = false }) {
   const [selectedIds, setSelectedIds] = useState([]);
   const [userDecks, setUserDecks] = useState([]);
 
+  // ── 3D tilt tracking for .card elements ──
+  useEffect(() => {
+    const onMove = (e) => {
+      const card = e.target.closest(".card");
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      card.style.setProperty("--rx", `${(y - 0.5) * -4}deg`);
+      card.style.setProperty("--ry", `${(x - 0.5) * 4}deg`);
+      card.style.setProperty("--mx", `${x * 100}%`);
+      card.style.setProperty("--my", `${y * 100}%`);
+    };
+    const onLeave = (e) => {
+      if (e.target.classList?.contains("card")) {
+        e.target.style.setProperty("--rx", "0deg");
+        e.target.style.setProperty("--ry", "0deg");
+      }
+    };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseleave", onLeave, true);
+    return () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseleave", onLeave, true);
+    };
+  }, []);
+
   const renderPage = () => {
     switch (activePage) {
       case "messaging": return <MessagingPage />;
@@ -51,8 +78,30 @@ export default function App({ embedded = false }) {
     }}>
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        .card { transition: all 0.2s ease; cursor: pointer; }
+        .card {
+          cursor: pointer;
+          position: relative;
+          transform-style: preserve-3d;
+          transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+          transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
         .card:hover { background: ${C.accentSoft} !important; }
+        .card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: radial-gradient(
+            ellipse at var(--mx, 50%) var(--my, 50%),
+            rgba(255,255,255,0.07) 0%,
+            transparent 65%
+          );
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.25s ease;
+          z-index: 1;
+        }
+        .card:hover::after { opacity: 1; }
         .tab { transition: all 0.15s ease; cursor: pointer; border: none; outline: none; background: none; }
         .tab:hover { color: ${C.text} !important; }
         .nav-item { transition: all 0.15s ease; cursor: pointer; border: none; outline: none; background: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 0; width: 100%; }
@@ -130,8 +179,8 @@ export default function App({ embedded = false }) {
         </div>
       </nav>
 
-      {/* ── MAIN CONTENT ── */}
-      {renderPage()}
+      {/* ── MAIN CONTENT ── key on isDark forces full re-render on theme toggle */}
+      <div key={String(isDark)} style={{ display: "contents" }}>{renderPage()}</div>
     </div>
   );
 }

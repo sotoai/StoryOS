@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { C } from "../../theme";
 import { pillarIcons } from "../icons/PageIcons";
 
-export function DetailModal({ title, tagline, description, detail, onClose }) {
+export function DetailModal({ title, tagline, description, detail, accentColor, onClose }) {
   useEffect(() => {
     const handler = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handler);
@@ -28,6 +28,7 @@ export function DetailModal({ title, tagline, description, detail, onClose }) {
         {/* Header */}
         <div style={{
           padding: "28px 32px 20px", borderBottom: `1px solid ${C.border}`,
+          borderLeft: accentColor ? `4px solid ${accentColor}` : "none",
           display: "flex", justifyContent: "space-between", alignItems: "flex-start",
           flexShrink: 0,
         }}>

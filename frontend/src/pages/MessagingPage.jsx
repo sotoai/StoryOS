@@ -119,7 +119,8 @@ export function MessagingPage() {
         onClick={() => setExpandCompany(!expandCompany)}
         style={{
           padding: "28px 32px",
-          border: `1px solid ${C.border}`,
+          borderTop: `1px solid ${C.border}`, borderRight: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}`,
+          borderLeft: "3px solid #555",
           borderRadius: 2,
           background: C.bg,
         }}
@@ -158,6 +159,7 @@ export function MessagingPage() {
                         tagline: "Design Philosophy",
                         description: section.content,
                         detail: null,
+                        accentColor: "#555",
                       });
                     }}
                     style={{
@@ -186,6 +188,7 @@ export function MessagingPage() {
               tagline: fw.company.tagline,
               description: fw.company.description,
               detail: fw.company.detail,
+              accentColor: "#555",
             })} />
           </div>
         )}
@@ -227,7 +230,8 @@ export function MessagingPage() {
           style={{
             flex: 1,
             padding: "28px 32px",
-            border: `1px solid ${C.border}`,
+            borderTop: `1px solid ${C.border}`, borderRight: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}`,
+            borderLeft: "3px solid #049fd9",
             borderRadius: 2,
             background: C.bg,
           }}
@@ -260,6 +264,7 @@ export function MessagingPage() {
                   tagline: fw.solutionCategory.tagline,
                   description: fw.solutionCategory.vision,
                   detail: fw.solutionCategory.detail,
+                  accentColor: "#049fd9",
                 })} />
               )}
             </div>
@@ -314,7 +319,7 @@ export function MessagingPage() {
                 padding: "14px 28px",
                 fontSize: 14, fontWeight: isActive ? 500 : 300,
                 color: isActive ? C.text : C.textTertiary,
-                borderBottom: isActive ? `2px solid ${C.text}` : "2px solid transparent",
+                borderBottom: isActive ? "2px solid #475569" : "2px solid transparent",
                 marginBottom: -1,
                 fontFamily: "inherit",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
@@ -348,6 +353,7 @@ export function MessagingPage() {
                 tagline: product.tagline,
                 description: product.description,
                 detail: product.detail,
+                accentColor: "#475569",
               })} />
             )}
           </div>
@@ -373,6 +379,7 @@ export function MessagingPage() {
                         background: C.bg,
                         borderRadius: 0,
                         minHeight: 110,
+                        borderLeft: "3px solid #0d9488",
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -407,6 +414,7 @@ export function MessagingPage() {
                               tagline: init.tagline,
                               description: init.description,
                               detail: init.detail,
+                              accentColor: "#0d9488",
                             })} />
                           )}
                         </div>
@@ -425,6 +433,8 @@ export function MessagingPage() {
                         <div key={i} style={{
                           padding: "10px 20px",
                           borderTop: i > 0 ? `1px solid ${C.borderLight}` : "none",
+                          borderLeft: "2px solid #94a3b8",
+                          marginLeft: 8,
                         }}>
                           <p style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{proj.name}</p>
                           <p style={{ fontSize: 12, color: C.textTertiary, lineHeight: 1.5, fontWeight: 300 }}>{proj.detail}</p>
@@ -450,6 +460,7 @@ export function MessagingPage() {
           tagline={detailModal.tagline}
           description={detailModal.description}
           detail={detailModal.detail}
+          accentColor={detailModal.accentColor}
           onClose={() => setDetailModal(null)}
         />
       )}

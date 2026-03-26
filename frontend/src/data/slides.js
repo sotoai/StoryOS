@@ -2,42 +2,61 @@ import { fw } from "./framework";
 import { verticals } from "./verticals";
 import { stories } from "./stories";
 
-// ─── SLIDE DATA (auto-generated from messaging hierarchy) ─────────────────────
+// ─── LAYER META ──────────────────────────────────────────────────────────────
+export const layerMeta = {
+  core:        { label: "Core",        icon: "◆", description: "Leadership-level canonical slide" },
+  technical:   { label: "Technical",   icon: "◇", description: "Architecture & deep dive" },
+  evidence:    { label: "Evidence",    icon: "◈", description: "Proof points & validation" },
+  alternative: { label: "Alternative", icon: "○", description: "Alternate angle or treatment" },
+};
+
+// ─── SLIDE DATA (auto-generated from messaging hierarchy with layers) ────────
 function generateMockSlides() {
   const out = [];
   let counter = 0;
   const mid = () => `s-${++counter}`;
 
-  // Company slide
-  out.push({ id: mid(), title: fw.company.headline, type: "company", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: fw.company.tagline });
+  // Company slides (stack)
+  out.push({ id: mid(), title: fw.company.headline, type: "company", nodeId: "company", layer: "core", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: fw.company.tagline });
+  out.push({ id: mid(), title: "One Cisco — Platform Advantage", type: "company", nodeId: "company", layer: "technical", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: "Design philosophy: tightly integrated, loosely coupled" });
+  out.push({ id: mid(), title: "One Cisco — Market Position", type: "company", nodeId: "company", layer: "evidence", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: "Gartner MQ Leader, IDC MarketScape Leader, Forrester Wave Leader" });
 
-  // Solution slide
-  out.push({ id: mid(), title: fw.solutionCategory.headline, type: "solution", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: fw.solutionCategory.tagline });
-
-  // Pillar slides
+  // Solution slides (stack)
+  out.push({ id: mid(), title: fw.solutionCategory.headline, type: "solution", nodeId: "solution", layer: "core", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: fw.solutionCategory.tagline });
   fw.solutionCategory.pillars.forEach(p => {
-    out.push({ id: mid(), title: p.label, type: "solution", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: "Architectural pillar" });
+    out.push({ id: mid(), title: p.label, type: "solution", nodeId: "solution", layer: "technical", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: "Architectural pillar" });
   });
+  out.push({ id: mid(), title: "Futureproof Workplace — Analyst Validation", type: "solution", nodeId: "solution", layer: "evidence", productId: null, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: "Gartner, Forrester, IDC convergence on workplace modernization" });
 
-  // General products, initiatives, use cases
+  // Product & initiative slides with layers
   fw.products.forEach(prod => {
-    out.push({ id: mid(), title: prod.name, type: "product", productId: prod.id, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: prod.tagline });
+    // Product core
+    out.push({ id: mid(), title: prod.name, type: "product", nodeId: prod.id, layer: "core", productId: prod.id, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: prod.tagline });
+    out.push({ id: mid(), title: `${prod.name} — Architecture`, type: "product", nodeId: prod.id, layer: "technical", productId: prod.id, initiativeId: null, useCaseIndex: null, verticals: ["general"], subtitle: `Technical architecture overview for ${prod.name}` });
+
     prod.initiatives.forEach(init => {
-      out.push({ id: mid(), title: init.name, type: "initiative", productId: prod.id, initiativeId: init.id, useCaseIndex: null, verticals: ["general"], subtitle: init.tagline });
+      // Initiative core
+      out.push({ id: mid(), title: init.name, type: "initiative", nodeId: init.id, layer: "core", productId: prod.id, initiativeId: init.id, useCaseIndex: null, verticals: ["general"], subtitle: init.tagline });
+      // Initiative technical
+      out.push({ id: mid(), title: `${init.name} — Deep Dive`, type: "initiative", nodeId: init.id, layer: "technical", productId: prod.id, initiativeId: init.id, useCaseIndex: null, verticals: ["general"], subtitle: `Architecture and technical detail for ${init.name}` });
+      // Initiative evidence
+      out.push({ id: mid(), title: `${init.name} — Customer Results`, type: "initiative", nodeId: init.id, layer: "evidence", productId: prod.id, initiativeId: init.id, useCaseIndex: null, verticals: ["general"], subtitle: `Proof points and customer metrics for ${init.name}` });
+
+      // Projects as use case slides (core layer)
       init.projects.forEach((proj, idx) => {
-        out.push({ id: mid(), title: proj.name, type: "useCase", productId: prod.id, initiativeId: init.id, useCaseIndex: idx, verticals: ["general"], subtitle: proj.detail.slice(0, 80) });
+        out.push({ id: mid(), title: proj.name, type: "useCase", nodeId: `${init.id}-uc-${idx}`, layer: "core", productId: prod.id, initiativeId: init.id, useCaseIndex: idx, verticals: ["general"], subtitle: proj.detail.slice(0, 80) });
       });
     });
   });
 
-  // Vertical-specific slides
+  // Vertical-specific slides (as alternative layer variants)
   Object.entries(verticals).forEach(([vKey, vData]) => {
     if (vKey === "general" || !vData.products) return;
     vData.products.forEach(prod => {
       prod.initiatives.forEach(init => {
-        out.push({ id: mid(), title: init.name, type: "initiative", productId: prod.id, initiativeId: init.id, useCaseIndex: null, verticals: [vKey], subtitle: init.tagline });
+        out.push({ id: mid(), title: `${init.name} — ${vData.label}`, type: "initiative", nodeId: init.id, layer: "alternative", productId: prod.id, initiativeId: init.id, useCaseIndex: null, verticals: [vKey], subtitle: init.tagline });
         init.projects.forEach((proj, idx) => {
-          out.push({ id: mid(), title: proj.name, type: "useCase", productId: prod.id, initiativeId: init.id, useCaseIndex: idx, verticals: [vKey], subtitle: proj.detail.slice(0, 80) });
+          out.push({ id: mid(), title: proj.name, type: "useCase", nodeId: `${init.id}-uc-${idx}`, layer: "core", productId: prod.id, initiativeId: init.id, useCaseIndex: idx, verticals: [vKey], subtitle: proj.detail.slice(0, 80) });
         });
       });
     });
@@ -52,19 +71,16 @@ export const allSlides = generateMockSlides();
   let sc = 200;
   stories.forEach(story => {
     const ids = [];
-    const base = { type: "story", storyId: story.id, productId: story.tags.products[0] || null, initiativeId: story.tags.initiatives[0] || null, useCaseIndex: null, verticals: [story.industry] };
+    const base = { type: "story", storyId: story.id, productId: story.tags.products[0] || null, initiativeId: story.tags.initiatives[0] || null, useCaseIndex: null, verticals: [story.industry], layer: "evidence", nodeId: story.tags.initiatives[0] || "stories" };
 
-    // Title slide
     const titleId = `ss-${++sc}`;
     allSlides.push({ ...base, id: titleId, title: story.customer, subtitle: story.summary, storySlideVariant: "title", storyCustomer: story.customer, storyIndustry: story.industry, storyMetrics: story.metrics });
     ids.push(titleId);
 
-    // Solution slide
     const solId = `ss-${++sc}`;
     allSlides.push({ ...base, id: solId, title: `${story.customer} — Solution`, subtitle: story.solution.slice(0, 120), storySlideVariant: "solution", storyCustomer: story.customer, storyIndustry: story.industry, storySolutionText: story.solution, storyProducts: story.tags.products, storyInitiatives: story.tags.initiatives });
     ids.push(solId);
 
-    // Outcome slide
     const outId = `ss-${++sc}`;
     allSlides.push({ ...base, id: outId, title: `${story.customer} — Outcome`, subtitle: story.outcome.slice(0, 120), storySlideVariant: "outcome", storyCustomer: story.customer, storyIndustry: story.industry, storyMetrics: story.metrics, storyOutcomeText: story.outcome });
     ids.push(outId);
@@ -72,6 +88,35 @@ export const allSlides = generateMockSlides();
     story.storySlideIds = ids;
   });
 })();
+
+// ─── SLIDE STACKS (group by nodeId for efficient lookup) ─────────────────────
+export const slideStacks = {};
+allSlides.forEach(s => {
+  if (!s.nodeId) return;
+  if (!slideStacks[s.nodeId]) slideStacks[s.nodeId] = [];
+  slideStacks[s.nodeId].push(s);
+});
+
+// ─── CORE DECKS (predefined paths through the stacks) ────────────────────────
+function buildCoreDeck(verticalFilter) {
+  const coreSlides = allSlides.filter(s =>
+    s.layer === "core" &&
+    s.type !== "useCase" &&
+    s.type !== "story" &&
+    (s.verticals.includes("general") || s.verticals.includes(verticalFilter))
+  );
+  return coreSlides.map(s => s.id);
+}
+
+export const coreDecks = {
+  general: { name: "Futureproof Workplace — Leadership Briefing", description: "Executive-level narrative across all pillars", slideIds: buildCoreDeck("general") },
+  healthcare: { name: "Healthcare Campus Modernization", description: "Vertical-specific leadership deck for healthcare", slideIds: buildCoreDeck("healthcare") },
+  education: { name: "Education Network Transformation", description: "K-12 and higher ed campus modernization", slideIds: buildCoreDeck("education") },
+  government: { name: "Government Zero Trust Campus", description: "Compliance-focused modernization for public sector", slideIds: buildCoreDeck("government") },
+  manufacturing: { name: "Manufacturing IT/OT Convergence", description: "Factory floor to front office unification", slideIds: buildCoreDeck("manufacturing") },
+  retail: { name: "Retail Connected Experience", description: "In-store and distribution center modernization", slideIds: buildCoreDeck("retail") },
+  financial: { name: "Financial Services Secure Campus", description: "Post-quantum and zero trust for financial institutions", slideIds: buildCoreDeck("financial") },
+};
 
 // ─── SLIDE LIBRARY (for Co-Author shelf recommendations) ──────────────────────
 export const slideLibrary = [

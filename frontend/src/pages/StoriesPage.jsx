@@ -20,13 +20,14 @@ function StoryCard({ story, onClick, selectedIds, onAddToDeck }) {
   const someInDeck = slideIds.some(id => selectedIds.includes(id));
   return (
     <div
+      className="card"
       onClick={onClick}
       style={{
         border: `1px solid ${C.border}`, borderRadius: 2, background: C.bg, cursor: "pointer",
-        transition: "all 0.2s ease", display: "flex", flexDirection: "column", overflow: "hidden",
+        display: "flex", flexDirection: "column", overflow: "hidden",
       }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = C.textTertiary; e.currentTarget.style.background = C.accentSoft; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.background = C.bg; }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = C.textTertiary; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; }}
     >
       {/* Thumbnail */}
       <div style={{ aspectRatio: "16/9", overflow: "hidden", position: "relative" }}>
